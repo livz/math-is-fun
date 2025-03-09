@@ -3,10 +3,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
     const images = [
         "img/fish.png",
-        "img/coral.png",
-        "img/shark.png",
+        "img/elehant.png",
+        "img/pigmy-marmoset.jpg",
         "img/whale.png",
-        "img/octopus.png"
+        "img/weasel.jpg"
     ];
 
     const randomImage = images[Math.floor(Math.random() * images.length)];
