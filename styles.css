@@ -1,0 +1,69 @@
+body, html {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #f0f0f0;
+}
+
+.game-container {
+  position: relative;
+  width: 800px; /* Set this to match your background image width */
+  height: 600px; /* Set this to match your background image height */
+}
+
+.background {
+  background-image: url('img/fish.png');
+  background-size: cover;
+  width: 100%;
+  height: 100%;
+  position: relative;
+  border: 5px solid #000; /* Black border around the game area */
+  display: grid;
+  grid-template-columns: repeat(4, 1fr); /* Adjust the number of columns as needed */
+  grid-template-rows: repeat(3, 1fr); /* Adjust the number of rows as needed */
+  gap: 0; /* Set gap to 0 to remove the space between tiles */
+}
+
+.square {
+  position: relative;
+  background-color: rgba(255, 0, 0, 1); /* Fully opaque red */
+  cursor: pointer;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.popup {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+  justify-content: center;
+  align-items: center;
+}
+
+.popup-content {
+  background-color: white;
+  padding: 20px;
+  border-radius: 5px;
+  text-align: center;
+}
+
+.close-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-size: 20px;
+  cursor: pointer;
+}

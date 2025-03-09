@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Interactive Game</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="game-container">
+    <div class="background">
+      <!-- Grid of squares with calculations inside -->
+    </div>
+  </div>
+
+  <!-- Popup for answering questions -->
+  <div id="popupForm" class="popup">
+    <div class="popup-content">
+      <span class="close-btn" onclick="closePopup()">&times;</span>
+      <h3 id="questionText"></h3>
+      <input type="text" id="userAnswer" placeholder="Enter your answer" />
+      <button onclick="submitAnswer()">Submit</button>
+      <button onclick="closePopup()">Cancel</button>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
