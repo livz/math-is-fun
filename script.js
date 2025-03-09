@@ -1,3 +1,27 @@
+document.addEventListener("DOMContentLoaded", function () {
+    console.log("Script is running!");
+
+    const images = [
+        "img/fish.png",
+        "img/coral.png",
+        "img/shark.png",
+        "img/whale.png",
+        "img/octopus.png"
+    ];
+
+    const randomImage = images[Math.floor(Math.random() * images.length)];
+    console.log("Selected image:", randomImage);
+
+    const bgElement = document.querySelector(".background");
+
+    if (bgElement) {
+        bgElement.style.backgroundImage = `url('${randomImage}')`;
+        console.log("Background updated!");
+    } else {
+        console.error("Element with class 'background' not found!");
+    }
+});
+
 // Function to generate a random color
 function getRandomColor() {
   const letters = '0123456789ABCDEF';
@@ -63,7 +87,7 @@ function generateRandomCalculation() {
       break;
     case '÷':
       // Make sure the division results in an integer
-      calculation = `${num1 * num2} / ${num2}`;
+      calculation = `${num1 * num2} ÷ ${num2}`;
       answer = num1; // the answer will be num1 since it's num1 * num2 divided by num2
       break;
   }
