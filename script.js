@@ -70,7 +70,7 @@ function submitAnswer() {
 
 // Function to generate a random calculation (addition, multiplication, division)
 function generateRandomCalculation() {
-  const operations = ['*', '÷']; // Addition, multiplication, division
+  const operations = ['x', '÷']; // Addition, multiplication, division
   const operation = operations[Math.floor(Math.random() * operations.length)];
 
   const num1 = Math.floor(Math.random() * 10) + 1; // Random number between 1 and 10
@@ -80,8 +80,8 @@ function generateRandomCalculation() {
   let answer = 0;
 
   switch (operation) {
-    case '*':
-      calculation = `${num1} * ${num2}`;
+    case 'x':
+      calculation = `${num1} x ${num2}`;
       answer = num1 * num2;
       break;
     case '÷':
