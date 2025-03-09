@@ -2,10 +2,15 @@ document.addEventListener("DOMContentLoaded", function () {
     console.log("Script is running!");
 
     const images = [
-        "img/fish.png",
+        "img/baboon.png",
         "img/elephant.png",
+        "img/fish.png",
+        "img/moon-bear.jpg",
         "img/pigmy-marmoset.jpg",
-        "img/weasel.jpg"
+        "img/pine-marten.jpeg",
+        "img/read-panda.jpg",
+        "img/weasel.jpg",
+        "img/wolverine.jpg"
     ];
 
     const randomImage = images[Math.floor(Math.random() * images.length)];
