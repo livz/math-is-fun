@@ -3,9 +3,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
     const images = [
         "img/fish.png",
-        "img/elehant.png",
+        "img/elephant.png",
         "img/pigmy-marmoset.jpg",
-        "img/whale.png",
         "img/weasel.jpg"
     ];
 
