@@ -10,8 +10,8 @@ body, html {
 
 .game-container {
   position: relative;
-  width: 800px; /* Set this to match your background image width */
-  height: 600px; /* Set this to match your background image height */
+  width: 800px; 
+  height: 600px;
 }
 
 .background {
@@ -19,16 +19,15 @@ body, html {
   width: 100%;
   height: 100%;
   position: relative;
-  border: 5px solid #000; /* Black border around the game area */
+  border: 5px solid #000;    /* Black border around the game area */
   display: grid;
-  grid-template-columns: repeat(4, 1fr); /* Adjust the number of columns as needed */
-  grid-template-rows: repeat(3, 1fr); /* Adjust the number of rows as needed */
-  gap: 0; /* Set gap to 0 to remove the space between tiles */
+  grid-template-columns: repeat(4, 1fr);      /* Number of columns*/
+  grid-template-rows: repeat(3, 1fr);         /* Number of rows */
+  gap: 0; /* Gap set to 0 to remove the space between tiles */
 }
 
 .square {
   position: relative;
-  background-color: rgba(255, 0, 0, 1); /* Fully opaque red */
   cursor: pointer;
   width: 100%;
   height: 100%;

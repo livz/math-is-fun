@@ -2,13 +2,14 @@ document.addEventListener("DOMContentLoaded", function () {
     console.log("Script is running!");
 
     const images = [
-        "img/baboon.png",
-        "img/elephant.png",
-        "img/fish.png",
+        "img/baboon.jpg",
+        "img/blue-whale.jpg",
+        "img/elephant.jpeg",
+        "img/humpback-whale.jpg",
         "img/moon-bear.jpg",
         "img/pigmy-marmoset.jpg",
-        "img/pine-marten.jpeg",
-        "img/read-panda.jpg",
+        "img/pine-marten.jpg",
+        "img/red-panda.jpg",
         "img/weasel.jpg",
         "img/wolverine.jpg"
     ];
@@ -63,7 +64,7 @@ function submitAnswer() {
   const userAnswer = document.getElementById('userAnswer').value;
 
   if (userAnswer === square.dataset.answer) {
-    // Remove the red background and calculation
+    // Remove the background and calculation t reveal the picture
     square.style.backgroundColor = 'transparent';  // Remove the background color
     square.style.backgroundImage = 'none';  // Ensure no background image is present
     square.textContent = '';  // Remove the calculation text from the square
@@ -92,7 +93,7 @@ function generateRandomCalculation() {
     case '÷':
       // Make sure the division results in an integer
       calculation = `${num1 * num2} ÷ ${num2}`;
-      answer = num1; // the answer will be num1 since it's num1 * num2 divided by num2
+      answer = num1;
       break;
   }
 
@@ -118,7 +119,7 @@ function generateGrid() {
     square.dataset.answer = answer;
 
     // Set a random background color for the square
-    square.style.backgroundColor = getRandomColor();
+    square.style.backgroundColor = getRandomColor(); // 'transparent' for debugging images
 
     // Display the calculation inside the square
     square.textContent = calculation;
