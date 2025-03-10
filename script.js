@@ -1,3 +1,10 @@
+// Global variables
+let randomPuzzle;
+const rows = 1;
+const cols = 1;
+const totalTiles = rows * cols;
+let solvedTiles = 0;
+
 document.addEventListener("DOMContentLoaded", function () {
     // Netlify identity widget
    document.getElementById("identityButton").addEventListener("click", () => {
@@ -9,18 +16,15 @@ document.addEventListener("DOMContentLoaded", function () {
       if (user) {
         // If user is logged in, display the content
         document.getElementById("loggedInContent").style.display = "block";
+        document.getElementById("solvedPuzzlesListContainer").style.display = "block";
 
         // Show correct identity button
         document.getElementById("identityButton").innerText = "Log Out";
       } else {
-        // Otherwise, ensure it's hidden
+        // Otherwise content hidden
         document.getElementById("loggedInContent").style.display = "none";
+        document.getElementById("solvedPuzzlesListContainer").style.display = "none";
       }
-    });
-
-    // Optional: Handle logout event
-    netlifyIdentity.on("logout", () => {
-      window.location.reload(); // Refresh the page after logout
     });
 
     // When a user logs in, show the content
@@ -29,10 +33,15 @@ document.addEventListener("DOMContentLoaded", function () {
 
       // Display the game area
       document.getElementById("loggedInContent").style.display = "block";
+      document.getElementById("solvedPuzzlesListContainer").style.display = "block";
       document.getElementById("identityButton").innerText = "Log Out"; 
       document.getElementById("identityButton").addEventListener("click", () => {
         netlifyIdentity.logout(); // Logs out the user when they click "Log Out"
       });
+
+      // Load correct user's solved puzzles
+      displaySolvedPuzzles();
+
     });
 
     // When a user logs out, hide the content
@@ -41,6 +50,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
       // Hide the game area
       document.getElementById("loggedInContent").style.display = "none";
+      document.getElementById("solvedPuzzlesListContainer").style.display = "none";
 
       // Closes the modal on logout
       netlifyIdentity.close();
@@ -55,27 +65,29 @@ document.addEventListener("DOMContentLoaded", function () {
     // Start Netlify Identity
     netlifyIdentity.init();
 
-    // Prepare the puzzle area
-    const images = [
-        "assets/img/baboon.jpg",
-        "assets/img/blue-whale.jpg",
-        "assets/img/elephant.jpeg",
-        "assets/img/humpback-whale.jpg",
-        "assets/img/moon-bear.jpg",
-        "assets/img/pigmy-marmoset.jpg",
-        "assets/img/pine-marten.jpg",
-        "assets/img/red-panda.jpg",
-        "assets/img/weasel.jpg",
-        "assets/img/wolverine.jpg"
+    // Define puzzles with names and images
+    const puzzles = [
+        { name: "Baboon", image: "assets/img/baboon.jpg" },
+        { name: "Blue Whale", image: "assets/img/blue-whale.jpg" },
+        { name: "Elephant", image: "assets/img/elephant.jpeg" },
+        { name: "Humpback Whale", image: "assets/img/humpback-whale.jpg" },
+        { name: "Moon Bear", image: "assets/img/moon-bear.jpg" },
+        { name: "Pygmy Marmoset", image: "assets/img/pigmy-marmoset.jpg" },
+        { name: "Pine Marten", image: "assets/img/pine-marten.jpg" },
+        { name: "Red Panda", image: "assets/img/red-panda.jpg" },
+        { name: "Weasel", image: "assets/img/weasel.jpg" },
+        { name: "Wolverine", image: "assets/img/wolverine.jpg" }
     ];
 
-    const randomImage = images[Math.floor(Math.random() * images.length)];
-    console.log("Selected image:", randomImage);
+    // Select a random puzzle
+    randomPuzzle = puzzles[Math.floor(Math.random() * puzzles.length)];
+    console.log("Selected puzzle:", randomPuzzle);
 
+    // Update the background image and display the puzzle name
     const bgElement = document.querySelector(".background");
 
     if (bgElement) {
-        bgElement.style.backgroundImage = `url('${randomImage}')`;
+        bgElement.style.backgroundImage = `url('${randomPuzzle.image}')`;
         console.log("Background updated!");
     } else {
         console.error("Element with class 'background' not found!");
@@ -111,6 +123,58 @@ function closePopup() {
   document.getElementById('popupForm').style.display = 'none';
 }
 
+// Keep track of solved puzzes per user in localStorage
+function updateSolvedPuzzles(puzzleName) {
+    const user = netlifyIdentity.currentUser();
+    if (!user) return;
+
+    let userEmail = user.email;
+    let userData = JSON.parse(localStorage.getItem(userEmail)) || { solvedPuzzles: [] };
+
+    if (!userData.solvedPuzzles.includes(puzzleName)) {
+        userData.solvedPuzzles.push(puzzleName);
+        localStorage.setItem(userEmail, JSON.stringify(userData));
+
+        displaySolvedPuzzles();
+    }
+}
+
+// Display solved puzzles
+function displaySolvedPuzzles() {
+    const user = netlifyIdentity.currentUser();
+    const solvedPuzzlesList = document.getElementById("solvedPuzzlesList");
+    solvedPuzzlesList.innerHTML = "";
+
+    if (!user) return; // No user logged in, nothing to display
+
+    let userEmail = user.email;
+    let userData = JSON.parse(localStorage.getItem(userEmail)) || { solvedPuzzles: [] };
+
+    userData.solvedPuzzles.forEach(puzzle => {
+        const listItem = document.createElement("li");
+        listItem.textContent = puzzle;
+        solvedPuzzlesList.appendChild(listItem);
+    });
+}
+
+// Show previously solved puzzles when the page loads
+displaySolvedPuzzles();
+
+// Check if all tiles are solved
+function checkPuzzleCompletion() {
+    if (solvedTiles === totalTiles) {
+        console.log("Puzzle Completed:", randomPuzzle.name);
+
+        // Wait for the last tile's fade-out effect
+        setTimeout(() => {
+            alert(`🎉 Congratulations! You completed ${randomPuzzle.name}.`);
+
+            // Update local storage
+            updateSolvedPuzzles(randomPuzzle.name);
+        }, 1000);   // Timeout to match your fade-out duration
+    }
+}
+
 // Function to submit the answer
 function submitAnswer() {
   const popup = document.getElementById('popupForm');
@@ -131,6 +195,11 @@ function submitAnswer() {
     square.textContent = '';  // Remove the calculation text from the square
 
     closePopup();  // Close the popup
+
+    solvedTiles++; // Increase solved tile count
+
+    checkPuzzleCompletion(); // Check if all tiles are solved
+
   } else {
     incorrectSound.play();
   }
@@ -164,11 +233,8 @@ function generateRandomCalculation() {
 // Generate the grid of squares with calculations inside
 function generateGrid() {
   const background = document.querySelector('.background');
-  const rows = 3; // Number of rows
-  const cols = 4; // Number of columns
-  const totalSquares = rows * cols;
 
-  for (let i = 0; i < totalSquares; i++) {
+  for (let i = 0; i < totalTiles; i++) {
     const square = document.createElement('div');
     square.classList.add('square');
     square.id = `square${i + 1}`;

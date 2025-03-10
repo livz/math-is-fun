@@ -53,8 +53,8 @@ body, html {
   position: relative;
   border: 5px solid #000;    /* Black border around the game area */
   display: grid;
-  grid-template-columns: repeat(4, 1fr);      /* Number of columns*/
-  grid-template-rows: repeat(3, 1fr);         /* Number of rows */
+  grid-template-rows: repeat(1, 1fr);         /* Number of rows */
+  grid-template-columns: repeat(1, 1fr);      /* Number of columns*/
   gap: 0; /* Gap set to 0 to remove the space between tiles */
 }
 
@@ -76,6 +76,29 @@ body, html {
 .fade-out {
   opacity: 0;  /* Make the square invisible */
   transform: scale(0);  /* Shrink the tile to create a disappearing effect */
+}
+
+#solvedPuzzlesListContainer {
+    margin-top: 20px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background: rgba(255, 255, 255, 0.8);
+    max-width: 250px;
+}
+
+#solvedPuzzlesList {
+    list-style-type: none;
+    padding: 0;
+}
+
+#solvedPuzzlesList li {
+    padding: 5px;
+    border-bottom: 1px solid #ddd;
+}
+
+#solvedPuzzlesList li:last-child {
+    border-bottom: none;
 }
 
 .popup {
