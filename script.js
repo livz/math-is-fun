@@ -82,7 +82,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // When a user logs in, show the content
     netlifyIdentity.on("login", user => {
-      console.log("User logged in", user);
+      console.log("[netlify > login] User logged in", user);
 
       // Display the game area
       showGameElements();
@@ -99,7 +99,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // When a user logs out, hide the content
     netlifyIdentity.on("logout", () => {
-      console.log("User logged out");
+      console.log("[netlify > logout] User logged out");
 
       // Hide the game area
       hideGameElements();
