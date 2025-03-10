@@ -28,6 +28,8 @@ const puzzles = [
 ];
 
 function showGameElements() {
+  console.log("Showing game elements");
+
   const listContainer = document.getElementById("solvedPuzzlesListContainer");
   const gameContainer = document.getElementById("loggedInContent");
   const mistakesCount = document.getElementById("mistakeContainer");
@@ -38,6 +40,7 @@ function showGameElements() {
 }
 
 function hideGameElements() {
+  console.log("Hiding game elements");
   const listContainer = document.getElementById("solvedPuzzlesListContainer");
   const gameContainer = document.getElementById("loggedInContent");
   const mistakesCount = document.getElementById("mistakeContainer");
