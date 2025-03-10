@@ -36,6 +36,30 @@ body, html {
   box-shadow: 0 0 5px #4CAF50; /* Green outline */
 }
 
+#userInfoContainer {
+    position: fixed;
+    top: 70px;  /* Below identity button */
+    left: 20px;
+    background: rgba(255, 255, 255, 0.8);
+    padding: 10px;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+#mistakeContainer {
+    position: absolute;
+    top: 70px;  /* Positioned below the login button */
+    right: 20px;
+    z-index: 999;
+    color: red;
+    padding: 10px 15px;
+    border-radius: 5px;
+    font-size: 18px;
+    font-weight: bold;
+    text-align: center;
+    min-width: 120px;
+}
+
 .game-container {
   position: relative;
   margin-top: 20px;
@@ -53,8 +77,8 @@ body, html {
   position: relative;
   border: 5px solid #000;    /* Black border around the game area */
   display: grid;
-  grid-template-rows: repeat(1, 1fr);         /* Number of rows */
-  grid-template-columns: repeat(1, 1fr);      /* Number of columns*/
+  grid-template-rows: repeat(5, 1fr);         /* Number of rows */
+  grid-template-columns: repeat(5, 1fr);      /* Number of columns*/
   gap: 0; /* Gap set to 0 to remove the space between tiles */
 }
 
@@ -80,7 +104,7 @@ body, html {
 
 #solvedPuzzlesListContainer {
     position: fixed;  /* Fix the position relative to the viewport */
-    top: 70px;        /* Position it below the identity button */
+    top: 140px;        /* Position it below the identity button */
     right: 20px;      /* Align it with the identity button */
     width: 220px;     /* Set a fixed width */
     padding: 10px;

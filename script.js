@@ -1,30 +1,31 @@
-let randomPuzzle;
-
-const rows = 1;
-const cols = 1;
-
+// General variables
+const rows = 5;
+const cols = 5;
 const totalTiles = rows * cols;
 
+// Per puzzle variables
+let randomPuzzle;
+let mistakes = 0;
 let solvedTiles = 0;
 
-  // Define other wallpapers
-  const wallpapers = [
-      { name: "Jungle", image: "assets/img/jungle.jpg"},
-  ]
+// Define other wallpapers
+const wallpapers = [
+    { name: "Jungle", image: "assets/img/jungle.jpg"},
+]
 
-  // Define puzzles with names and images
-  const puzzles = [
-      { name: "Baboon", image: "assets/img/baboon.jpg" },
-      { name: "Blue Whale", image: "assets/img/blue-whale.jpg" },
-      { name: "Elephant", image: "assets/img/elephant.jpeg" },
-      { name: "Humpback Whale", image: "assets/img/humpback-whale.jpg" },
-      { name: "Moon Bear", image: "assets/img/moon-bear.jpg" },
-      { name: "Pygmy Marmoset", image: "assets/img/pigmy-marmoset.jpg" },
-      { name: "Pine Marten", image: "assets/img/pine-marten.jpg" },
-      { name: "Red Panda", image: "assets/img/red-panda.jpg" },
-      { name: "Weasel", image: "assets/img/weasel.jpg" },
-      { name: "Wolverine", image: "assets/img/wolverine.jpg" }
-  ];
+// Define puzzles with names and images
+const puzzles = [
+    { name: "Baboon", image: "assets/img/baboon.jpg" },
+    { name: "Blue Whale", image: "assets/img/blue-whale.jpg" },
+    { name: "Elephant", image: "assets/img/elephant.jpeg" },
+    { name: "Humpback Whale", image: "assets/img/humpback-whale.jpg" },
+    { name: "Moon Bear", image: "assets/img/moon-bear.jpg" },
+    { name: "Pygmy Marmoset", image: "assets/img/pigmy-marmoset.jpg" },
+    { name: "Pine Marten", image: "assets/img/pine-marten.jpg" },
+    { name: "Red Panda", image: "assets/img/red-panda.jpg" },
+    { name: "Weasel", image: "assets/img/weasel.jpg" },
+    { name: "Wolverine", image: "assets/img/wolverine.jpg" }
+];
 
 function checkUserStatus() {
     const user = netlifyIdentity.currentUser();
@@ -253,13 +254,26 @@ function submitAnswer() {
     solvedTiles++; // Increase solved tile count
 
     checkPuzzleCompletion(); // Check if all tiles are solved
-
-    // Wait for the fade-out transition to end, then remove the square
-    square.addEventListener('transitionend', function () {
-      square.remove();      // Remove from the DOM
-    }, { once: true });     //Listener will be removed after it's triggered
   } else {
     incorrectSound.play();
+    
+    // Increase mistake count
+    mistakes++; 
+    document.getElementById("mistakeCount").textContent = mistakes;
+
+    if (mistakes >= 3) {
+      // Delay the alert to let the sound play first
+      setTimeout(() => {
+        alert("Too many mistakes! Loading a new puzzle...");
+
+        // Reset mistakes for the new puzzle
+        mistakes = 0; 
+        document.getElementById("mistakeCount").textContent = mistakes;
+
+        // Load another puzzle
+        loadNextPuzzle();
+      }, 1000); // 1-second delay (adjust as needed)
+    }
   }
 }
 
@@ -296,6 +310,9 @@ function generateGrid() {
   solvedTiles = 0;
 
   const background = document.querySelector('.background');
+
+  // Remove all previous squares
+  background.innerHTML = '';
 
   for (let i = 0; i < totalTiles; i++) {
     console.log(`Add tile ${i}`);
