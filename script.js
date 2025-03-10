@@ -1,9 +1,25 @@
-// Global variables
 let randomPuzzle;
+
 const rows = 1;
 const cols = 1;
+
 const totalTiles = rows * cols;
+
 let solvedTiles = 0;
+
+  // Define puzzles with names and images
+  const puzzles = [
+      { name: "Baboon", image: "assets/img/baboon.jpg" },
+      { name: "Blue Whale", image: "assets/img/blue-whale.jpg" },
+      { name: "Elephant", image: "assets/img/elephant.jpeg" },
+      { name: "Humpback Whale", image: "assets/img/humpback-whale.jpg" },
+      { name: "Moon Bear", image: "assets/img/moon-bear.jpg" },
+      { name: "Pygmy Marmoset", image: "assets/img/pigmy-marmoset.jpg" },
+      { name: "Pine Marten", image: "assets/img/pine-marten.jpg" },
+      { name: "Red Panda", image: "assets/img/red-panda.jpg" },
+      { name: "Weasel", image: "assets/img/weasel.jpg" },
+      { name: "Wolverine", image: "assets/img/wolverine.jpg" }
+  ];
 
 function checkUserStatus() {
     const user = netlifyIdentity.currentUser();
@@ -83,33 +99,9 @@ document.addEventListener("DOMContentLoaded", function () {
     // Check user status and show/hide elements
     checkUserStatus();
 
-    // Define puzzles with names and images
-    const puzzles = [
-        { name: "Baboon", image: "assets/img/baboon.jpg" },
-        { name: "Blue Whale", image: "assets/img/blue-whale.jpg" },
-        { name: "Elephant", image: "assets/img/elephant.jpeg" },
-        { name: "Humpback Whale", image: "assets/img/humpback-whale.jpg" },
-        { name: "Moon Bear", image: "assets/img/moon-bear.jpg" },
-        { name: "Pygmy Marmoset", image: "assets/img/pigmy-marmoset.jpg" },
-        { name: "Pine Marten", image: "assets/img/pine-marten.jpg" },
-        { name: "Red Panda", image: "assets/img/red-panda.jpg" },
-        { name: "Weasel", image: "assets/img/weasel.jpg" },
-        { name: "Wolverine", image: "assets/img/wolverine.jpg" }
-    ];
+    // Attempt to load a new puzzle
+    loadNextPuzzle();
 
-    // Select a random puzzle
-    randomPuzzle = puzzles[Math.floor(Math.random() * puzzles.length)];
-    console.log("Selected puzzle:", randomPuzzle);
-
-    // Update the background image and display the puzzle name
-    const bgElement = document.querySelector(".background");
-
-    if (bgElement) {
-        bgElement.style.backgroundImage = `url('${randomPuzzle.image}')`;
-        console.log("Background updated!");
-    } else {
-        console.error("Element with class 'background' not found!");
-    }
 });
 
 // Function to generate a random color
@@ -141,6 +133,44 @@ function closePopup() {
   document.getElementById('popupForm').style.display = 'none';
 }
 
+// Start a new puzzle
+function startPuzzle(puzzle) {
+    // Set background image
+    const bgElement = document.querySelector(".background");
+
+    if (bgElement) {
+        bgElement.style.backgroundImage = `url('${puzzle.image}')`;
+    }
+
+    // Generate grid of calculations
+    generateGrid();
+}
+
+// Load another puzzle, if available
+function loadNextPuzzle() {
+    const user = netlifyIdentity.currentUser();
+    if (!user) return;
+
+    let userEmail = user.email;
+    let userData = JSON.parse(localStorage.getItem(userEmail)) || { solvedPuzzles: [] };
+
+    // Find an unsolved puzzle
+    let unsolvedPuzzles = puzzles.filter(p => !userData.solvedPuzzles.includes(p.name));
+
+    if (unsolvedPuzzles.length > 0) {
+        // Pick a new puzzle and start it
+        randomPuzzle = unsolvedPuzzles[Math.floor(Math.random() * unsolvedPuzzles.length)];
+        startPuzzle(randomPuzzle);
+    } else {
+        // All puzzles solved - show a message
+        document.querySelector(".game-container").innerHTML = `
+            <h2>🎉 Congratulations! 🎉</h2>
+            <p>You've solved all puzzles!</p>
+            <button onclick="restartGame()">Play Again</button>
+        `;
+    }
+}
+
 // Keep track of solved puzzes per user in localStorage
 function updateSolvedPuzzles(puzzleName) {
     const user = netlifyIdentity.currentUser();
@@ -152,9 +182,11 @@ function updateSolvedPuzzles(puzzleName) {
     if (!userData.solvedPuzzles.includes(puzzleName)) {
         userData.solvedPuzzles.push(puzzleName);
         localStorage.setItem(userEmail, JSON.stringify(userData));
-
-        displaySolvedPuzzles();
     }
+
+    displaySolvedPuzzles();
+
+    loadNextPuzzle();
 }
 
 // Display solved puzzles
@@ -283,6 +315,3 @@ document.addEventListener('keydown', (event) => {
     closePopup();
   }
 });
-
-// Generate the grid when the page loads
-window.onload = generateGrid;
