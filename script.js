@@ -68,6 +68,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Initialize Netlify Identity
     netlifyIdentity.on("init", user => {
+      console.log("[netlify > init] Checking user", user);
+
       if (user) {
         // If user is logged in, display the content
         showGameElements();
@@ -76,7 +78,7 @@ document.addEventListener("DOMContentLoaded", function () {
         document.getElementById("identityButton").innerText = "Log Out";
       } else {
         // Otherwise content hidden
-        hideGameElements()
+        hideGameElements();
       }
     });
 
