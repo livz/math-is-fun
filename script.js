@@ -5,6 +5,21 @@ const cols = 1;
 const totalTiles = rows * cols;
 let solvedTiles = 0;
 
+function checkUserStatus() {
+    const user = netlifyIdentity.currentUser();
+    const listContainer = document.getElementById("solvedPuzzlesListContainer");
+    const gameContainer = document.getElementById("loggedInContent");
+
+    if (!user) {
+        listContainer.style.display = "none";
+        gameContainer.style.display = "none";
+    } else {
+        listContainer.style.display = "block"
+        gameContainer.style.display = "block";
+        displaySolvedPuzzles();
+    }
+}
+
 document.addEventListener("DOMContentLoaded", function () {
     // Netlify identity widget
    document.getElementById("identityButton").addEventListener("click", () => {
@@ -64,6 +79,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Start Netlify Identity
     netlifyIdentity.init();
+
+    // Check user status and show/hide elements
+    checkUserStatus();
 
     // Define puzzles with names and images
     const puzzles = [
