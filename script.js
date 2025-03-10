@@ -32,9 +32,9 @@ function showGameElements() {
   const gameContainer = document.getElementById("loggedInContent");
   const mistakesCount = document.getElementById("mistakeContainer");
 
-  listContainer.style.display = "none";
-  gameContainer.style.display = "none";
-  mistakesCount.style.display = "none";
+  listContainer.style.display = "block";
+  gameContainer.style.display = "block";
+  mistakesCount.style.display = "block";
 }
 
 function hideGameElements() {
@@ -42,9 +42,9 @@ function hideGameElements() {
   const gameContainer = document.getElementById("loggedInContent");
   const mistakesCount = document.getElementById("mistakeContainer");
 
-  listContainer.style.display = "block";
-  gameContainer.style.display = "block";
-  mistakesCount.style.display = "block";
+  listContainer.style.display = "none";
+  gameContainer.style.display = "none";
+  mistakesCount.style.display = "none";
 }
 
 function checkUserStatus() {
