@@ -9,6 +9,9 @@ document.addEventListener("DOMContentLoaded", function () {
       if (user) {
         // If user is logged in, display the content
         document.getElementById("loggedInContent").style.display = "block";
+
+        // Show correct identity button
+        document.getElementById("identityButton").innerText = "Log Out";
       } else {
         // Otherwise, ensure it's hidden
         document.getElementById("loggedInContent").style.display = "none";
