@@ -262,6 +262,9 @@ function submitAnswer() {
     document.getElementById("mistakeCount").textContent = mistakes;
 
     if (mistakes >= 3) {
+      // No more retries
+      closePopup();
+
       // Delay the alert to let the sound play first
       setTimeout(() => {
         alert("Too many mistakes! Loading a new puzzle...");
