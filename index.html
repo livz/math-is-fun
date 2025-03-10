@@ -2,8 +2,11 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <link rel="icon" type="image/x-icon" href="/assets/icons/favicon.ico">                    <!-- Standard ICO -->
+  <link rel="icon" type="image/png" sizes="256x256" href="/assets/icons/favicon.png">       <!-- Modern browsers -->
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/icons/apple-touch-icon.png">   <!-- iOS devices -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Interactive Game</title>
+  <title>Interactive Math Puzzles Game</title>
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -16,7 +19,6 @@
   <!-- Popup for answering questions -->
   <div id="popupForm" class="popup">
     <div class="popup-content">
-      <span class="close-btn" onclick="closePopup()">&times;</span>
       <h3 id="questionText"></h3>
       <input type="text" id="userAnswer" placeholder="Enter your answer" />
       <button onclick="submitAnswer()">Submit</button>
@@ -27,3 +29,13 @@
   <script src="script.js"></script>
 </body>
 </html>
+
+
+<!-- 
+  TODO:
+  * Clean code
+  * Effect when turning tiles
+  * Sounds for correct and wrong answers
+  * User profiles
+  * Keeping track of solved puzzles
+-->

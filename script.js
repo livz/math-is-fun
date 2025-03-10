@@ -2,16 +2,16 @@ document.addEventListener("DOMContentLoaded", function () {
     console.log("Script is running!");
 
     const images = [
-        "img/baboon.jpg",
-        "img/blue-whale.jpg",
-        "img/elephant.jpeg",
-        "img/humpback-whale.jpg",
-        "img/moon-bear.jpg",
-        "img/pigmy-marmoset.jpg",
-        "img/pine-marten.jpg",
-        "img/red-panda.jpg",
-        "img/weasel.jpg",
-        "img/wolverine.jpg"
+        "assets/img/baboon.jpg",
+        "assets/img/blue-whale.jpg",
+        "assets/img/elephant.jpeg",
+        "assets/img/humpback-whale.jpg",
+        "assets/img/moon-bear.jpg",
+        "assets/img/pigmy-marmoset.jpg",
+        "assets/img/pine-marten.jpg",
+        "assets/img/red-panda.jpg",
+        "assets/img/weasel.jpg",
+        "assets/img/wolverine.jpg"
     ];
 
     const randomImage = images[Math.floor(Math.random() * images.length)];
