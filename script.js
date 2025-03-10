@@ -41,6 +41,7 @@ function showGameElements() {
 
 function hideGameElements() {
   console.log("Hiding game elements");
+
   const listContainer = document.getElementById("solvedPuzzlesListContainer");
   const gameContainer = document.getElementById("loggedInContent");
   const mistakesCount = document.getElementById("mistakeContainer");
@@ -51,6 +52,7 @@ function hideGameElements() {
 }
 
 function checkUserStatus() {
+  console.log("Check user status ...");
   const user = netlifyIdentity.currentUser();
 
   if (user) {
@@ -174,6 +176,8 @@ function startPuzzle(puzzle) {
 
 // Load another puzzle, if available
 function loadNextPuzzle() {
+    console.log(" Load next puzzle");
+
     const user = netlifyIdentity.currentUser();
     if (!user) return;
 
