@@ -8,10 +8,42 @@ body, html {
   background-color: #f0f0f0;
 }
 
+#identityButton {
+  position: fixed;  /* Fixed position */
+  top: 20px;        /* Distance from the top of the page */
+  right: 20px;      /* Distance from the right side of the page */
+  z-index: 1000;    /* Make sure it stays on top */
+  background-color: #4CAF50;  /* Green background */
+  color: white;               /* White text */
+  padding: 10px 20px;         /* Add some padding */
+  font-size: 16px;            /* Set font size */
+  border: none;               /* Remove the default border */
+  border-radius: 5px;         /* Rounded corners */
+  cursor: pointer;           /* Pointer cursor on hover */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Subtle shadow for depth */
+  transition: background-color 0.3s ease, transform 0.2s ease; /* Smooth transition */
+}
+
+/* Add hover effect */
+#identityButton:hover {
+  background-color: #45a049;  /* Darker green when hovered */
+  transform: translateY(-2px); /* Slightly raise the button */
+}
+
+/* Add focus effect for accessibility */
+#identityButton:focus {
+  outline: none;              /* Remove default focus outline */
+  box-shadow: 0 0 5px #4CAF50; /* Green outline */
+}
+
 .game-container {
   position: relative;
+  margin-top: 20px;
+  padding: 20px;
   width: 800px; 
   height: 600px;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
 .background {
@@ -37,6 +69,13 @@ body, html {
   color: white;
   font-size: 18px;
   font-weight: bold;
+  transition: opacity 1s ease, transform 1s ease; /* Add transition for opacity and transform */
+}
+
+/* Fade out effect for disappearing square */
+.fade-out {
+  opacity: 0;  /* Make the square invisible */
+  transform: scale(0);  /* Shrink the tile to create a disappearing effect */
 }
 
 .popup {

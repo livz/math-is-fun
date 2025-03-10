@@ -9,9 +9,6 @@ document.addEventListener("DOMContentLoaded", function () {
       if (user) {
         // If user is logged in, display the content
         document.getElementById("loggedInContent").style.display = "block";
-
-        document.getElementById("identityButton").innerText = "Log Out";
-
       } else {
         // Otherwise, ensure it's hidden
         document.getElementById("loggedInContent").style.display = "none";
@@ -125,8 +122,9 @@ function submitAnswer() {
   if (userAnswer === square.dataset.answer) {
     correctSound.play();
 
-    square.style.backgroundColor = 'transparent';  // Remove the background color
-    square.style.backgroundImage = 'none';  // Ensure no background image is present
+    // Fade out the tile
+    square.classList.add('fade-out');
+
     square.textContent = '';  // Remove the calculation text from the square
 
     closePopup();  // Close the popup
