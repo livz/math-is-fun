@@ -102,6 +102,8 @@ document.addEventListener("DOMContentLoaded", function () {
       // Load correct user's solved puzzles
       displaySolvedPuzzles();
 
+      // Attempt to load a puzzle
+      loadNextPuzzle();
     });
 
     // When a user logs out, hide the content
@@ -126,9 +128,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Check user status and show/hide elements
     checkUserStatus();
-
-    // Attempt to load a new puzzle
-    loadNextPuzzle();
 });
 
 // Function to generate a random color
