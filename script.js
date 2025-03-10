@@ -51,9 +51,10 @@ function checkUserStatus() {
     const user = netlifyIdentity.currentUser();
 
     if (!user) {
-        showGameElements();
-    } else {
         hideGameElements();
+    } else {
+        console.log("User logged in, showing game elements", user);
+        showGameElements();
         displaySolvedPuzzles();
     }
 }
