@@ -63,13 +63,20 @@ function submitAnswer() {
   const square = document.getElementById(squareId);
   const userAnswer = document.getElementById('userAnswer').value;
 
+  // Define the sounds for correct and incorrect answers
+  const correctSound = new Audio('assets/sounds/correct.mp3');
+  const incorrectSound = new Audio('assets/sounds/incorrect.mp3');
+
   if (userAnswer === square.dataset.answer) {
+    correctSound.play();
+
     square.style.backgroundColor = 'transparent';  // Remove the background color
     square.style.backgroundImage = 'none';  // Ensure no background image is present
     square.textContent = '';  // Remove the calculation text from the square
+
     closePopup();  // Close the popup
   } else {
-    alert('Incorrect answer. Please try again.');
+    incorrectSound.play();
   }
 }
 
@@ -118,7 +125,7 @@ function generateGrid() {
     square.style.backgroundColor = getRandomColor(); // 'transparent' for debugging images
     square.textContent = calculation;
     square.addEventListener('click', () => openPopup(square));
-    
+
     background.appendChild(square);
   }
 }
