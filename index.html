@@ -13,9 +13,16 @@
   <!-- iOS devices -->   
   <link rel="apple-touch-icon" sizes="180x180" href="assets/icons/apple-touch-icon.png">
   <link rel="stylesheet" href="styles.css">
+  <!-- Netlify identify widget -->
+  <script type="text/javascript" src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
 </head>
 <body>
-  <div class="game-container">
+  <button id="loginButton">Log In</button>
+  <button id="signoutButton" style="display: none;">Sign Out</button>
+
+  <!-- Game puzzle area -->
+  <div class="game-container" id="loggedInContent" style="display: none;">
+    <!-- Content only visible after login -->
     <div class="background">
       <!-- Grid of squares with calculations inside -->
     </div>
@@ -39,7 +46,7 @@
 <!-- 
   TODO:
   * Effect when turning tiles
-  * Sounds for correct and wrong answers
+  * Create a domain
   * User profiles
   * Keeping track of solved puzzles
 -->

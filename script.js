@@ -1,6 +1,44 @@
 document.addEventListener("DOMContentLoaded", function () {
-    console.log("Script is running!");
+    // Netlify identity widget
+   document.getElementById("loginButton").addEventListener("click", () => {
+      netlifyIdentity.open();   // Open the Netlify Identity login/signup modal
+    });
 
+    document.getElementById("signoutButton").addEventListener("click", () => {
+      netlifyIdentity.close();  // Close the modal if it's open
+      netlifyIdentity.logout(); // Log out the user
+    });
+
+    // Initialize Netlify Identity
+    netlifyIdentity.on("init", user => {
+      if (user) {
+        // If user is logged in, display the content
+        document.getElementById("loggedInContent").style.display = "block";
+      } else {
+        // Otherwise, ensure it's hidden
+        document.getElementById("loggedInContent").style.display = "none";
+      }
+    });
+
+    // Optional: Handle logout event
+    netlifyIdentity.on("logout", () => {
+      window.location.reload(); // Refresh the page after logout
+    });
+
+    // When a user logs in, show the content
+    netlifyIdentity.on("login", user => {
+      document.getElementById("loggedInContent").style.display = "block";
+    });
+
+    // When a user logs out, hide the content
+    netlifyIdentity.on("logout", () => {
+      document.getElementById("loggedInContent").style.display = "none";
+    });
+
+    // Start Netlify Identity
+    netlifyIdentity.init();
+
+    // Prepare the puzzle area
     const images = [
         "assets/img/baboon.jpg",
         "assets/img/blue-whale.jpg",
