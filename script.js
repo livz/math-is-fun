@@ -11,14 +11,7 @@ let solvedTiles = 0;
   const puzzles = [
       { name: "Baboon", image: "assets/img/baboon.jpg" },
       { name: "Blue Whale", image: "assets/img/blue-whale.jpg" },
-      { name: "Elephant", image: "assets/img/elephant.jpeg" },
-      { name: "Humpback Whale", image: "assets/img/humpback-whale.jpg" },
-      { name: "Moon Bear", image: "assets/img/moon-bear.jpg" },
-      { name: "Pygmy Marmoset", image: "assets/img/pigmy-marmoset.jpg" },
-      { name: "Pine Marten", image: "assets/img/pine-marten.jpg" },
-      { name: "Red Panda", image: "assets/img/red-panda.jpg" },
-      { name: "Weasel", image: "assets/img/weasel.jpg" },
-      { name: "Wolverine", image: "assets/img/wolverine.jpg" }
+      { name: "Elephant", image: "assets/img/elephant.jpeg" }
   ];
 
 function checkUserStatus() {
@@ -98,6 +91,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Check user status and show/hide elements
     checkUserStatus();
+
+    // Show previously solved puzzles when the page loads
+    displaySolvedPuzzles();
 
     // Attempt to load a new puzzle
     loadNextPuzzle();
@@ -206,9 +202,6 @@ function displaySolvedPuzzles() {
         solvedPuzzlesList.appendChild(listItem);
     });
 }
-
-// Show previously solved puzzles when the page loads
-displaySolvedPuzzles();
 
 // Check if all tiles are solved
 function checkPuzzleCompletion() {
