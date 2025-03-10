@@ -27,17 +27,33 @@ const puzzles = [
     { name: "Wolverine", image: "assets/img/wolverine.jpg" }
 ];
 
+function showGameElements() {
+  const listContainer = document.getElementById("solvedPuzzlesListContainer");
+  const gameContainer = document.getElementById("loggedInContent");
+  const mistakesCount = document.getElementById("mistakeContainer");
+
+  listContainer.style.display = "none";
+  gameContainer.style.display = "none";
+  mistakesCount.style.display = "none";
+}
+
+function hideGameElements() {
+  const listContainer = document.getElementById("solvedPuzzlesListContainer");
+  const gameContainer = document.getElementById("loggedInContent");
+  const mistakesCount = document.getElementById("mistakeContainer");
+
+  listContainer.style.display = "block";
+  gameContainer.style.display = "block";
+  mistakesCount.style.display = "block";
+}
+
 function checkUserStatus() {
     const user = netlifyIdentity.currentUser();
-    const listContainer = document.getElementById("solvedPuzzlesListContainer");
-    const gameContainer = document.getElementById("loggedInContent");
 
     if (!user) {
-        listContainer.style.display = "none";
-        gameContainer.style.display = "none";
+        showGameElements();
     } else {
-        listContainer.style.display = "block"
-        gameContainer.style.display = "block";
+        hideGameElements();
         displaySolvedPuzzles();
     }
 }
@@ -52,15 +68,13 @@ document.addEventListener("DOMContentLoaded", function () {
     netlifyIdentity.on("init", user => {
       if (user) {
         // If user is logged in, display the content
-        document.getElementById("loggedInContent").style.display = "block";
-        document.getElementById("solvedPuzzlesListContainer").style.display = "block";
+        showGameElements();
 
         // Show correct identity button
         document.getElementById("identityButton").innerText = "Log Out";
       } else {
         // Otherwise content hidden
-        document.getElementById("loggedInContent").style.display = "none";
-        document.getElementById("solvedPuzzlesListContainer").style.display = "none";
+        hideGameElements()
       }
     });
 
@@ -69,8 +83,8 @@ document.addEventListener("DOMContentLoaded", function () {
       console.log("User logged in", user);
 
       // Display the game area
-      document.getElementById("loggedInContent").style.display = "block";
-      document.getElementById("solvedPuzzlesListContainer").style.display = "block";
+      showGameElements();
+
       document.getElementById("identityButton").innerText = "Log Out"; 
       document.getElementById("identityButton").addEventListener("click", () => {
         netlifyIdentity.logout(); // Logs out the user when they click "Log Out"
@@ -86,8 +100,7 @@ document.addEventListener("DOMContentLoaded", function () {
       console.log("User logged out");
 
       // Hide the game area
-      document.getElementById("loggedInContent").style.display = "none";
-      document.getElementById("solvedPuzzlesListContainer").style.display = "none";
+      hideGameElements();
 
       // Closes the modal on logout
       netlifyIdentity.close();
