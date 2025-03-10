@@ -1,12 +1,7 @@
 document.addEventListener("DOMContentLoaded", function () {
     // Netlify identity widget
-   document.getElementById("loginButton").addEventListener("click", () => {
+   document.getElementById("identityButton").addEventListener("click", () => {
       netlifyIdentity.open();   // Open the Netlify Identity login/signup modal
-    });
-
-    document.getElementById("signoutButton").addEventListener("click", () => {
-      netlifyIdentity.close();  // Close the modal if it's open
-      netlifyIdentity.logout(); // Log out the user
     });
 
     // Initialize Netlify Identity
@@ -27,12 +22,31 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // When a user logs in, show the content
     netlifyIdentity.on("login", user => {
+      console.log("User logged in", user);
+
+      // Display the game area
       document.getElementById("loggedInContent").style.display = "block";
+      document.getElementById("identityButton").innerText = "Log Out"; 
+      document.getElementById("identityButton").addEventListener("click", () => {
+        netlifyIdentity.logout(); // Logs out the user when they click "Log Out"
+      });
     });
 
     // When a user logs out, hide the content
     netlifyIdentity.on("logout", () => {
+      console.log("User logged out");
+
+      // Hide the game area
       document.getElementById("loggedInContent").style.display = "none";
+
+      // Closes the modal on logout
+      netlifyIdentity.close();
+
+      // Reset button text
+      document.getElementById("identityButton").innerText = "Sign Up / Log In";
+      document.getElementById("identityButton").addEventListener("click", () => {
+        netlifyIdentity.open();
+      });
     });
 
     // Start Netlify Identity
