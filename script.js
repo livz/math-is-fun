@@ -48,15 +48,16 @@ function hideGameElements() {
 }
 
 function checkUserStatus() {
-    const user = netlifyIdentity.currentUser();
+  const user = netlifyIdentity.currentUser();
 
-    if (!user) {
-        hideGameElements();
-    } else {
-        console.log("User logged in, showing game elements", user);
-        showGameElements();
-        displaySolvedPuzzles();
-    }
+  if (user) {
+    console.log("User logged in, showing game elements", user);
+    showGameElements();
+    displaySolvedPuzzles();
+  } else {
+    console.log("No user logged in. Hide game elements");
+    hideGameElements();
+  }
 }
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -121,7 +122,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Attempt to load a new puzzle
     loadNextPuzzle();
-
 });
 
 // Function to generate a random color
