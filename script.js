@@ -7,11 +7,23 @@ const totalTiles = rows * cols;
 
 let solvedTiles = 0;
 
+  // Define other wallpapers
+  const wallpapers = [
+      { name: "Jungle", image: "assets/img/jungle.jpg"},
+  ]
+
   // Define puzzles with names and images
   const puzzles = [
       { name: "Baboon", image: "assets/img/baboon.jpg" },
       { name: "Blue Whale", image: "assets/img/blue-whale.jpg" },
-      { name: "Elephant", image: "assets/img/elephant.jpeg" }
+      { name: "Elephant", image: "assets/img/elephant.jpeg" },
+      { name: "Humpback Whale", image: "assets/img/humpback-whale.jpg" },
+      { name: "Moon Bear", image: "assets/img/moon-bear.jpg" },
+      { name: "Pygmy Marmoset", image: "assets/img/pigmy-marmoset.jpg" },
+      { name: "Pine Marten", image: "assets/img/pine-marten.jpg" },
+      { name: "Red Panda", image: "assets/img/red-panda.jpg" },
+      { name: "Weasel", image: "assets/img/weasel.jpg" },
+      { name: "Wolverine", image: "assets/img/wolverine.jpg" }
   ];
 
 function checkUserStatus() {
@@ -92,9 +104,6 @@ document.addEventListener("DOMContentLoaded", function () {
     // Check user status and show/hide elements
     checkUserStatus();
 
-    // Show previously solved puzzles when the page loads
-    displaySolvedPuzzles();
-
     // Attempt to load a new puzzle
     loadNextPuzzle();
 
@@ -135,6 +144,7 @@ function startPuzzle(puzzle) {
     const bgElement = document.querySelector(".background");
 
     if (bgElement) {
+        console.log(`Loading puzzle image: ${puzzle.image}`);
         bgElement.style.backgroundImage = `url('${puzzle.image}')`;
     }
 
@@ -158,12 +168,13 @@ function loadNextPuzzle() {
         randomPuzzle = unsolvedPuzzles[Math.floor(Math.random() * unsolvedPuzzles.length)];
         startPuzzle(randomPuzzle);
     } else {
-        // All puzzles solved - show a message
-        document.querySelector(".game-container").innerHTML = `
-            <h2>🎉 Congratulations! 🎉</h2>
-            <p>You've solved all puzzles!</p>
-            <button onclick="restartGame()">Play Again</button>
-        `;
+        // All puzzles solved
+        alert(`🎉 Congratulations! You completed all the puzzles`);
+
+        // Set the background
+        const background = document.querySelector('.background');
+        const jungle = wallpapers.find(p => p.name === "Jungle");
+        background.style.backgroundImage = `url('${jungle.image}')`;
     }
 }
 
@@ -243,6 +254,10 @@ function submitAnswer() {
 
     checkPuzzleCompletion(); // Check if all tiles are solved
 
+    // Wait for the fade-out transition to end, then remove the square
+    square.addEventListener('transitionend', function () {
+      square.remove();      // Remove from the DOM
+    }, { once: true });     //Listener will be removed after it's triggered
   } else {
     incorrectSound.play();
   }
@@ -275,9 +290,16 @@ function generateRandomCalculation() {
 
 // Generate the grid of squares with calculations inside
 function generateGrid() {
+  console.log(`Generate a new grid of calculations`);
+
+  // Re-initialise solved puzzles counter
+  solvedTiles = 0;
+
   const background = document.querySelector('.background');
 
   for (let i = 0; i < totalTiles; i++) {
+    console.log(`Add tile ${i}`);
+
     const square = document.createElement('div');
     square.classList.add('square');
     square.id = `square${i + 1}`;
@@ -290,6 +312,9 @@ function generateGrid() {
     square.style.backgroundColor = getRandomColor(); // 'transparent' for debugging images
     square.textContent = calculation;
     square.addEventListener('click', () => openPopup(square));
+
+    console.log(square);
+    console.log(background);
 
     background.appendChild(square);
   }

@@ -79,13 +79,18 @@ body, html {
 }
 
 #solvedPuzzlesListContainer {
-    margin-top: 20px;
+    position: fixed;  /* Fix the position relative to the viewport */
+    top: 70px;        /* Position it below the identity button */
+    right: 20px;      /* Align it with the identity button */
+    width: 220px;     /* Set a fixed width */
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 5px;
     background: rgba(255, 255, 255, 0.8);
-    max-width: 250px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Match button shadow */
+    z-index: 999;    /* Keep it above other elements */
 }
+
 
 #solvedPuzzlesList {
     list-style-type: none;
