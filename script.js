@@ -37,7 +37,7 @@ function getRandomColor() {
   return color;
 }
 
-// Function to open the popup
+// Open the question popup
 function openPopup(square) {
   const popup = document.getElementById('popupForm');
   const questionText = document.getElementById('questionText');
@@ -51,7 +51,7 @@ function openPopup(square) {
   userAnswer.focus();
 }
 
-// Function to close the popup
+// Close the popup
 function closePopup() {
   document.getElementById('popupForm').style.display = 'none';
 }
@@ -64,7 +64,6 @@ function submitAnswer() {
   const userAnswer = document.getElementById('userAnswer').value;
 
   if (userAnswer === square.dataset.answer) {
-    // Remove the background and calculation t reveal the picture
     square.style.backgroundColor = 'transparent';  // Remove the background color
     square.style.backgroundImage = 'none';  // Ensure no background image is present
     square.textContent = '';  // Remove the calculation text from the square
@@ -74,9 +73,9 @@ function submitAnswer() {
   }
 }
 
-// Function to generate a random calculation (addition, multiplication, division)
+// Generate a random calculation (multiplication and division)
 function generateRandomCalculation() {
-  const operations = ['x', '÷']; // Addition, multiplication, division
+  const operations = ['x', '÷'];
   const operation = operations[Math.floor(Math.random() * operations.length)];
 
   const num1 = Math.floor(Math.random() * 10) + 1; // Random number between 1 and 10
@@ -91,7 +90,6 @@ function generateRandomCalculation() {
       answer = num1 * num2;
       break;
     case '÷':
-      // Make sure the division results in an integer
       calculation = `${num1 * num2} ÷ ${num2}`;
       answer = num1;
       break;
@@ -100,7 +98,7 @@ function generateRandomCalculation() {
   return { calculation, answer };
 }
 
-// Function to generate the grid of squares with calculations inside
+// Generate the grid of squares with calculations inside
 function generateGrid() {
   const background = document.querySelector('.background');
   const rows = 3; // Number of rows
@@ -117,14 +115,10 @@ function generateGrid() {
 
     square.dataset.calculation = calculation;
     square.dataset.answer = answer;
-
-    // Set a random background color for the square
     square.style.backgroundColor = getRandomColor(); // 'transparent' for debugging images
-
-    // Display the calculation inside the square
     square.textContent = calculation;
-
     square.addEventListener('click', () => openPopup(square));
+    
     background.appendChild(square);
   }
 }
