@@ -77,6 +77,11 @@ document.addEventListener("DOMContentLoaded", function () {
         loadGameState();
       } else {
         console.log("No saved state found. Loading a new puzzle...");
+
+        // Initialise the mistakes display
+        mistakes = 0;
+        updateMistakesDisplay();
+
         loadNextPuzzle();
       }
     });
@@ -109,7 +114,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
         // Show correct identity button
         document.getElementById("identityButton").innerText = "Log Out";
-    }});
+    }
+
+    drawUiElements();
+  });
 
 // Function to generate a random color
 function getRandomColor() {
@@ -257,7 +265,7 @@ function loadGameState() {
   background.style.backgroundImage = `url('${randomPuzzle.image}')`;
 
   mistakes = savedState.mistakes;
-  document.getElementById("mistakeCount").textContent = mistakes;
+  updateMistakesDisplay();
 
   savedState.tiles.forEach(tileData => {
     const square = document.createElement("div");
@@ -294,12 +302,35 @@ function checkPuzzleCompletion() {
 
             displaySolvedPuzzles();
 
+            // Initialise the mistakes display
+            mistakes = 0;
+            updateMistakesDisplay();
+
             loadNextPuzzle();
 
             // Need to re-save the state because it was saved before the timeout
             saveGameState();
         }, 1000);   // Timeout to match your fade-out duration
     }
+}
+
+// Update the mistake display
+function updateMistakesDisplay() {
+  console.log("Updating mistakes display");
+
+  const mistakesDisplay = document.getElementById("mistakesDisplay");
+  mistakesDisplay.innerHTML = '';  // Clear the previous content
+
+  // Loop to create 3 X's, and fill them based on the number of mistakes
+  for (let i = 0; i < 3; i++) {
+    const xElement = document.createElement("span");
+    xElement.classList.add("mistake-x");
+    if (i < mistakes) {
+      xElement.classList.add("filled"); // Fill the X if mistake is made
+    }
+    xElement.textContent = "X";  // Set the character for the X
+    mistakesDisplay.appendChild(xElement);
+  }
 }
 
 // Function to submit the answer
@@ -331,7 +362,7 @@ function submitAnswer() {
     
     // Increase mistake count
     mistakes++; 
-    document.getElementById("mistakeCount").textContent = mistakes;
+    updateMistakesDisplay();
 
     if (mistakes >= 3) {
       // No more retries
@@ -342,8 +373,8 @@ function submitAnswer() {
         alert("Too many mistakes! Loading a new puzzle...");
 
         // Reset mistakes for the new puzzle
-        mistakes = 0; 
-        document.getElementById("mistakeCount").textContent = mistakes;
+        mistakes = 0;
+        updateMistakesDisplay();
 
         // Load another puzzle
         loadNextPuzzle();

@@ -46,18 +46,39 @@ body, html {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
+
 #mistakeContainer {
-    position: fixed;
-    top: 70px;  /* Positioned below the login button */
-    right: 20px;
-    z-index: 999;
-    color: red;
-    padding: 10px 15px;
+    position: fixed;  /* Fix the position relative to the viewport */
+    top: 70px;        /* Position it below the identity button */
+    right: 20px;      /* Align it with the identity button */
+    width: 100px;     /* Set a fixed width */
+    padding: 10px;
+    border: 1px solid #ccc;
     border-radius: 5px;
-    font-size: 18px;
+    background: rgba(255, 255, 255, 0.8);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    z-index: 999;
+
+    /* Flexbox settings */
+    display: flex;
+    justify-content: center;   /* Center horizontally */
+    align-items: center;       /* Center vertically */
+    text-align: center;        /* Center text inside elements */
+}
+
+#mistakesDisplay {
+    display: flex;
+    gap: 10px;  /* Space between X's */
+    font-size: 24px;
+}
+
+.mistake-x {
+    color: gray;
     font-weight: bold;
-    text-align: center;
-    min-width: 120px;
+}
+
+.mistake-x.filled {
+    color: red;
 }
 
 .game-container {
@@ -104,7 +125,7 @@ body, html {
 
 #solvedPuzzlesListContainer {
     position: fixed;  /* Fix the position relative to the viewport */
-    top: 140px;        /* Position it below the identity button */
+    top: 130px;        /* Position it below the identity button */
     right: 20px;      /* Align it with the identity button */
     width: 220px;     /* Set a fixed width */
     padding: 10px;
