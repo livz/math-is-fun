@@ -77,8 +77,8 @@ body, html {
   position: relative;
   border: 5px solid #000;    /* Black border around the game area */
   display: grid;
-  grid-template-rows: repeat(5, 1fr);         /* Number of rows */
-  grid-template-columns: repeat(5, 1fr);      /* Number of columns*/
+  grid-template-rows: repeat(3, 1fr);         /* Number of rows */
+  grid-template-columns: repeat(3, 1fr);      /* Number of columns*/
   gap: 0; /* Gap set to 0 to remove the space between tiles */
 }
 

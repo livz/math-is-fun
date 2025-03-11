@@ -1,6 +1,6 @@
 // General variables
-const rows = 5;
-const cols = 5;
+const rows = 3;
+const cols = 3;
 const totalTiles = rows * cols;
 
 // Per puzzle variables
@@ -27,42 +27,18 @@ const puzzles = [
     { name: "Wolverine", image: "assets/img/wolverine.jpg" }
 ];
 
-function showGameElements() {
-  console.log("Showing game elements");
+function drawUiElements() {
+  console.log("Draw game elements");
 
-  const listContainer = document.getElementById("solvedPuzzlesListContainer");
-  const gameContainer = document.getElementById("loggedInContent");
-  const mistakesCount = document.getElementById("mistakeContainer");
-
-  listContainer.style.display = "block";
-  gameContainer.style.display = "block";
-  mistakesCount.style.display = "block";
-}
-
-function hideGameElements() {
-  console.log("Hiding game elements");
-
-  const listContainer = document.getElementById("solvedPuzzlesListContainer");
-  const gameContainer = document.getElementById("loggedInContent");
-  const mistakesCount = document.getElementById("mistakeContainer");
-
-  listContainer.style.display = "none";
-  gameContainer.style.display = "none";
-  mistakesCount.style.display = "none";
-}
-
-function checkUserStatus() {
-  console.log("Check user status ...");
   const user = netlifyIdentity.currentUser();
+  const elementIds = ["solvedPuzzlesListContainer", "loggedInContent", "mistakeContainer"];
 
-  if (user) {
-    console.log("User logged in, showing game elements", user);
-    showGameElements();
-    displaySolvedPuzzles();
-  } else {
-    console.log("No user logged in. Hide game elements");
-    hideGameElements();
-  }
+  elementIds.forEach(id => {
+    const element = document.getElementById(id);
+    if (element) {
+      element.style.display = user ? "block" : "none";
+    }
+  });
 }
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -75,15 +51,14 @@ document.addEventListener("DOMContentLoaded", function () {
     netlifyIdentity.on("init", user => {
       console.log("[netlify > init] Checking user", user);
 
+      drawUiElements();
+
       if (user) {
-        // If user is logged in, display the content
-        showGameElements();
+        // Restore game if one was in progress for the user
+        loadGameState();
 
         // Show correct identity button
         document.getElementById("identityButton").innerText = "Log Out";
-      } else {
-        // Otherwise content hidden
-        hideGameElements();
       }
     });
 
@@ -91,8 +66,7 @@ document.addEventListener("DOMContentLoaded", function () {
     netlifyIdentity.on("login", user => {
       console.log("[netlify > login] User logged in", user);
 
-      // Display the game area
-      showGameElements();
+      drawUiElements();
 
       document.getElementById("identityButton").innerText = "Log Out"; 
       document.getElementById("identityButton").addEventListener("click", () => {
@@ -102,8 +76,18 @@ document.addEventListener("DOMContentLoaded", function () {
       // Load correct user's solved puzzles
       displaySolvedPuzzles();
 
-      // Attempt to load a puzzle
-      loadNextPuzzle();
+      // Attempt to load a puzzle if one not in progress
+      let userEmail = user.email;
+      let userData = JSON.parse(localStorage.getItem(userEmail)) || {};
+      const savedState = userData.gameState;
+
+      if (savedState) {
+        console.log("Restoring saved game state...");
+        loadGameState();
+      } else {
+        console.log("No saved state found. Loading a new puzzle...");
+        loadNextPuzzle();
+      }
     });
 
     // When a user logs out, hide the content
@@ -111,7 +95,7 @@ document.addEventListener("DOMContentLoaded", function () {
       console.log("[netlify > logout] User logged out");
 
       // Hide the game area
-      hideGameElements();
+      drawUiElements();
 
       // Closes the modal on logout
       netlifyIdentity.close();
@@ -127,7 +111,7 @@ document.addEventListener("DOMContentLoaded", function () {
     netlifyIdentity.init();
 
     // Check user status and show/hide elements
-    checkUserStatus();
+    drawUiElements();
 });
 
 // Function to generate a random color
@@ -175,7 +159,7 @@ function startPuzzle(puzzle) {
 
 // Load another puzzle, if available
 function loadNextPuzzle() {
-    console.log(" Load next puzzle");
+    console.log("Load next puzzle");
 
     const user = netlifyIdentity.currentUser();
     if (!user) return;
@@ -225,8 +209,6 @@ function displaySolvedPuzzles() {
     const solvedPuzzlesList = document.getElementById("solvedPuzzlesList");
     solvedPuzzlesList.innerHTML = "";
 
-    if (!user) return; // No user logged in, nothing to display
-
     let userEmail = user.email;
     let userData = JSON.parse(localStorage.getItem(userEmail)) || { solvedPuzzles: [] };
 
@@ -235,6 +217,66 @@ function displaySolvedPuzzles() {
         listItem.textContent = puzzle;
         solvedPuzzlesList.appendChild(listItem);
     });
+}
+
+// Save game state per user
+function saveGameState() {
+  const user = netlifyIdentity.currentUser();
+
+  if (!user) return; // Don't save if no user is logged in
+
+  let userEmail = user.email;
+  let userData = JSON.parse(localStorage.getItem(userEmail)) || { solvedPuzzles: [], gameState: null };
+
+  const tiles = Array.from(document.querySelectorAll(".square")).map(square => ({
+    id: square.id,
+    calculation: square.dataset.calculation,
+    answer: square.dataset.answer,
+    solved: square.classList.contains("fade-out") // Mark if tile was solved
+  }));
+
+  userData.gameState = {
+    puzzleName: randomPuzzle.name, // Store current puzzle
+    tiles: tiles,
+    mistakes: mistakes
+  };
+
+  localStorage.setItem(userEmail, JSON.stringify(userData));
+}
+
+function loadGameState() {
+  const user = netlifyIdentity.currentUser();
+  if (!user) return; // No user logged in, start fresh
+
+  let userEmail = user.email;
+  let userData = JSON.parse(localStorage.getItem(userEmail));
+
+  if (!userData || !userData.gameState) return; // No saved game state, start fresh
+  const savedState = userData.gameState;
+
+  const background = document.querySelector('.background');
+  randomPuzzle = puzzles.find(p => p.name === savedState.puzzleName);
+  background.style.backgroundImage = `url('${randomPuzzle.image}')`;
+
+  mistakes = savedState.mistakes;
+  document.getElementById("mistakeCount").textContent = mistakes;
+
+  savedState.tiles.forEach(tileData => {
+    const square = document.createElement("div");
+    square.classList.add("square");
+    square.id = tileData.id;
+    square.dataset.calculation = tileData.calculation;
+    square.dataset.answer = tileData.answer;
+    square.textContent = tileData.solved ? "" : tileData.calculation; // Hide if solved
+
+    if (tileData.solved) {
+      square.classList.add("fade-out"); // Keep it hidden
+    } else {
+      square.addEventListener("click", () => openPopup(square));
+    }
+
+    background.appendChild(square);
+  });
 }
 
 // Check if all tiles are solved
@@ -300,6 +342,8 @@ function submitAnswer() {
       }, 1000); // 1-second delay (adjust as needed)
     }
   }
+
+  saveGameState();
 }
 
 // Generate a random calculation (multiplication and division)
@@ -340,8 +384,6 @@ function generateGrid() {
   background.innerHTML = '';
 
   for (let i = 0; i < totalTiles; i++) {
-    console.log(`Add tile ${i}`);
-
     const square = document.createElement('div');
     square.classList.add('square');
     square.id = `square${i + 1}`;
@@ -354,9 +396,6 @@ function generateGrid() {
     square.style.backgroundColor = getRandomColor(); // 'transparent' for debugging images
     square.textContent = calculation;
     square.addEventListener('click', () => openPopup(square));
-
-    console.log(square);
-    console.log(background);
 
     background.appendChild(square);
   }
