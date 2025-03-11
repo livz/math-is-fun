@@ -42,8 +42,9 @@ function drawUiElements() {
 }
 
 document.addEventListener("DOMContentLoaded", function () {
+
     // Netlify identity widget
-   document.getElementById("identityButton").addEventListener("click", () => {
+    document.getElementById("identityButton").addEventListener("click", () => {
       netlifyIdentity.open();   // Open the Netlify Identity login/signup modal
     });
 
@@ -232,6 +233,7 @@ function saveGameState() {
     id: square.id,
     calculation: square.dataset.calculation,
     answer: square.dataset.answer,
+    color: square.style.backgroundColor,
     solved: square.classList.contains("fade-out") // Mark if tile was solved
   }));
 
@@ -245,6 +247,8 @@ function saveGameState() {
 }
 
 function loadGameState() {
+  console.log("loadGameState called");
+
   const user = netlifyIdentity.currentUser();
   if (!user) return; // No user logged in, start fresh
 
@@ -255,6 +259,8 @@ function loadGameState() {
   const savedState = userData.gameState;
 
   const background = document.querySelector('.background');
+  background.innerHTML = "";  // Clear game area
+
   randomPuzzle = puzzles.find(p => p.name === savedState.puzzleName);
   background.style.backgroundImage = `url('${randomPuzzle.image}')`;
 
@@ -265,6 +271,7 @@ function loadGameState() {
     const square = document.createElement("div");
     square.classList.add("square");
     square.id = tileData.id;
+    square.style.backgroundColor = tileData.color;
     square.dataset.calculation = tileData.calculation;
     square.dataset.answer = tileData.answer;
     square.textContent = tileData.solved ? "" : tileData.calculation; // Hide if solved

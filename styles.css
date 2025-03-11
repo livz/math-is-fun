@@ -47,7 +47,7 @@ body, html {
 }
 
 #mistakeContainer {
-    position: absolute;
+    position: fixed;
     top: 70px;  /* Positioned below the login button */
     right: 20px;
     z-index: 999;
