@@ -51,16 +51,6 @@ document.addEventListener("DOMContentLoaded", function () {
     // Initialize Netlify Identity
     netlifyIdentity.on("init", user => {
       console.log("[netlify > init] Checking user", user);
-
-      drawUiElements();
-
-      if (user) {
-        // Restore game if one was in progress for the user
-        loadGameState();
-
-        // Show correct identity button
-        document.getElementById("identityButton").innerText = "Log Out";
-      }
     });
 
     // When a user logs in, show the content
@@ -108,12 +98,18 @@ document.addEventListener("DOMContentLoaded", function () {
       });
     });
 
-    // Start Netlify Identity
     netlifyIdentity.init();
 
     // Check user status and show/hide elements
-    drawUiElements();
-});
+    const user = netlifyIdentity.currentUser();
+    console.log("Page loaded. User: ", user);
+    if (user) {
+        // Restore game if one was in progress for the user
+        loadGameState();
+
+        // Show correct identity button
+        document.getElementById("identityButton").innerText = "Log Out";
+    }});
 
 // Function to generate a random color
 function getRandomColor() {
@@ -198,10 +194,6 @@ function updateSolvedPuzzles(puzzleName) {
         userData.solvedPuzzles.push(puzzleName);
         localStorage.setItem(userEmail, JSON.stringify(userData));
     }
-
-    displaySolvedPuzzles();
-
-    loadNextPuzzle();
 }
 
 // Display solved puzzles
@@ -288,6 +280,8 @@ function loadGameState() {
 
 // Check if all tiles are solved
 function checkPuzzleCompletion() {
+    console.log(`Checking puzzle completion: ${solvedTiles}/${totalTiles}`);
+
     if (solvedTiles === totalTiles) {
         console.log("Puzzle Completed:", randomPuzzle.name);
 
@@ -297,6 +291,13 @@ function checkPuzzleCompletion() {
 
             // Update local storage
             updateSolvedPuzzles(randomPuzzle.name);
+
+            displaySolvedPuzzles();
+
+            loadNextPuzzle();
+
+            // Need to re-save the state because it was saved before the timeout
+            saveGameState();
         }, 1000);   // Timeout to match your fade-out duration
     }
 }
