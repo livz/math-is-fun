@@ -1,6 +1,6 @@
 // General variables
-const rows = 1;
-const cols = 1;
+const rows = 3;
+const cols = 3;
 const totalTiles = rows * cols;
 
 // Per puzzle variables
@@ -16,7 +16,15 @@ const wallpapers = [
 // Define puzzles with names and images
 const puzzles = [
     { name: "Baboon", image: "assets/img/baboon.jpg" },
-    { name: "Blue Whale", image: "assets/img/blue-whale.jpg" }
+    { name: "Blue Whale", image: "assets/img/blue-whale.jpg" },
+    { name: "Elephant", image: "assets/img/elephant.jpeg" },
+    { name: "Humpback Whale", image: "assets/img/humpback-whale.jpg" },
+    { name: "Moon Bear", image: "assets/img/moon-bear.jpg" },
+    { name: "Pygmy Marmoset", image: "assets/img/pigmy-marmoset.jpg" },
+    { name: "Pine Marten", image: "assets/img/pine-marten.jpg" },
+    { name: "Red Panda", image: "assets/img/red-panda.jpg" },
+    { name: "Weasel", image: "assets/img/weasel.jpg" },
+    { name: "Wolverine", image: "assets/img/wolverine.jpg" }
 ];
 
 function drawUiElements() {
@@ -31,6 +39,20 @@ function drawUiElements() {
       element.style.display = user ? "block" : "none";
     }
   });
+
+  identityButton = document.getElementById("identityButton");
+
+  if (user) {
+    identityButton.innerText = "Log Out";
+    identityButton.addEventListener("click", () => {
+      netlifyIdentity.logout();
+    });
+  } else {
+    identityButton.innerText = "Sign Up / Log In";
+    identityButton.addEventListener("click", () => {
+      netlifyIdentity.open();
+    });
+  }
 }
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -50,11 +72,6 @@ document.addEventListener("DOMContentLoaded", function () {
       console.log("[netlify > login] User logged in", user);
 
       drawUiElements();
-
-      document.getElementById("identityButton").innerText = "Log Out"; 
-      document.getElementById("identityButton").addEventListener("click", () => {
-        netlifyIdentity.logout(); // Logs out the user when they click "Log Out"
-      });
 
       // Load correct user's solved puzzles
       displaySolvedPuzzles();
@@ -87,12 +104,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
       // Closes the modal on logout
       netlifyIdentity.close();
-
-      // Reset button text
-      document.getElementById("identityButton").innerText = "Sign Up / Log In";
-      document.getElementById("identityButton").addEventListener("click", () => {
-        netlifyIdentity.open();
-      });
     });
 
     netlifyIdentity.init();
