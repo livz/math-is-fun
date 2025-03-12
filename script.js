@@ -112,6 +112,9 @@ document.addEventListener("DOMContentLoaded", function () {
         // Restore game if one was in progress for the user
         loadGameState();
 
+        // Load correct user's solved puzzles
+        displaySolvedPuzzles();
+
         // Show correct identity button
         document.getElementById("identityButton").innerText = "Log Out";
     }

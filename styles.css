@@ -46,7 +46,6 @@ body, html {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
-
 #mistakeContainer {
     position: fixed;  /* Fix the position relative to the viewport */
     top: 70px;        /* Position it below the identity button */
