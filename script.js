@@ -72,11 +72,11 @@ document.addEventListener("DOMContentLoaded", function () {
       let userData = JSON.parse(localStorage.getItem(userEmail)) || {};
       const savedState = userData.gameState;
 
-      if (savedState) {
+      if (savedState && savedState.gameInProgress) {
         console.log("Restoring saved game state...");
         loadGameState();
       } else {
-        console.log("No saved state found. Loading a new puzzle...");
+        console.log("No saved game in progress. Loading a new puzzle...");
 
         // Initialise the mistakes display
         mistakes = 0;
@@ -177,6 +177,7 @@ function loadNextPuzzle() {
 
     // Find an unsolved puzzle
     let unsolvedPuzzles = puzzles.filter(p => !userData.solvedPuzzles.includes(p.name));
+    console.log("Unsolved puzzles: ", unsolvedPuzzles);
 
     if (unsolvedPuzzles.length > 0) {
         // Pick a new puzzle and start it
@@ -243,7 +244,8 @@ function saveGameState() {
   userData.gameState = {
     puzzleName: randomPuzzle.name, // Store current puzzle
     tiles: tiles,
-    mistakes: mistakes
+    mistakes: mistakes,
+    gameInProgress: solvedTiles < totalTiles
   };
 
   localStorage.setItem(userEmail, JSON.stringify(userData));
