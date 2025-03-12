@@ -1,6 +1,6 @@
 // General variables
-const rows = 3;
-const cols = 3;
+const rows = 1;
+const cols = 1;
 const totalTiles = rows * cols;
 
 // Per puzzle variables
@@ -16,15 +16,7 @@ const wallpapers = [
 // Define puzzles with names and images
 const puzzles = [
     { name: "Baboon", image: "assets/img/baboon.jpg" },
-    { name: "Blue Whale", image: "assets/img/blue-whale.jpg" },
-    { name: "Elephant", image: "assets/img/elephant.jpeg" },
-    { name: "Humpback Whale", image: "assets/img/humpback-whale.jpg" },
-    { name: "Moon Bear", image: "assets/img/moon-bear.jpg" },
-    { name: "Pygmy Marmoset", image: "assets/img/pigmy-marmoset.jpg" },
-    { name: "Pine Marten", image: "assets/img/pine-marten.jpg" },
-    { name: "Red Panda", image: "assets/img/red-panda.jpg" },
-    { name: "Weasel", image: "assets/img/weasel.jpg" },
-    { name: "Wolverine", image: "assets/img/wolverine.jpg" }
+    { name: "Blue Whale", image: "assets/img/blue-whale.jpg" }
 ];
 
 function drawUiElements() {
@@ -107,10 +99,26 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Check user status and show/hide elements
     const user = netlifyIdentity.currentUser();
-    console.log("Page loaded. User: ", user);
+    console.log("Page loading. Netlify user: ", user);
+
     if (user) {
+        let userEmail = user.email;
+        let userData = JSON.parse(localStorage.getItem(userEmail)) || {};
+        const savedState = userData.gameState;
+
         // Restore game if one was in progress for the user
-        loadGameState();
+        if (savedState && savedState.gameInProgress) {
+          console.log("Restoring saved game state...");
+          loadGameState();
+        } else {
+          console.log("No saved game in progress. Loading a new puzzle...");
+
+          // Initialise the mistakes display
+          mistakes = 0;
+          updateMistakesDisplay();
+
+          loadNextPuzzle();
+        }
 
         // Load correct user's solved puzzles
         displaySolvedPuzzles();
