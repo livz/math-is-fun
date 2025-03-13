@@ -1,6 +1,6 @@
 // General variables
-const rows = 3;
-const cols = 3;
+const rows = 1;
+const cols = 1;
 const totalTiles = rows * cols;
 
 // Per puzzle variables
@@ -26,6 +26,19 @@ const puzzles = [
     { name: "Weasel", image: "assets/img/weasel.jpg" },
     { name: "Wolverine", image: "assets/img/wolverine.jpg" }
 ];
+
+function showGameMessage(message) {
+    const gameMessage = document.getElementById("gameMessage");
+    gameMessage.textContent = message;
+    gameMessage.classList.remove("hidden");
+    gameMessage.style.opacity = "1";
+
+    // Fade out after 3 seconds
+    setTimeout(() => {
+        gameMessage.style.opacity = "0";
+        setTimeout(() => gameMessage.classList.add("hidden"), 500); // Hide after fading
+    }, 3000);
+}
 
 function drawUiElements() {
   console.log("Draw game elements");
@@ -204,7 +217,7 @@ function loadNextPuzzle() {
         startPuzzle(randomPuzzle);
     } else {
         // All puzzles solved
-        alert(`🎉 Congratulations! You completed all the puzzles`);
+        showGameMessage(`🎉 Congratulations! You completed all the puzzles`);
 
         // Set the background
         const background = document.querySelector('.background');
@@ -319,7 +332,7 @@ function checkPuzzleCompletion() {
 
         // Wait for the last tile's fade-out effect
         setTimeout(() => {
-            alert(`🎉 Congratulations! You completed ${randomPuzzle.name}.`);
+            showGameMessage(`🎉 Congratulations! You completed ${randomPuzzle.name}.`);
 
             // Update local storage
             updateSolvedPuzzles(randomPuzzle.name);
