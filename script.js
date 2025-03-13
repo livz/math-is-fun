@@ -15,27 +15,8 @@ const wallpapers = [
 
 // Define puzzles with names and images
 const puzzles = [
-    { name: "Albatross", image: "assets/img/albatross.jpg" },
-    { name: "Baboon", image: "assets/img/baboon.jpg" },
-    { name: "Bald Eagle", image: "assets/img/bald-eagle.jpg" },
-    { name: "Blue Whale", image: "assets/img/blue-whale.jpg" },
-    { name: "Crocodile", image: "assets/img/crocodile.jpeg" },
-    { name: "Elephant", image: "assets/img/elephant.jpeg" },
-    { name: "Giant Squid", image: "assets/img/giant-squid.jpeg" },
-    { name: "Hammerhead Shark", image: "assets/img/hammerhead-shark.jpg" },
-    { name: "Humpback Whale", image: "assets/img/humpback-whale.jpg" },
-    { name: "Hummingbird", image: "assets/img/hummingbird.jpg" },
-    { name: "Koala", image: "assets/img/koala.jpg" },
-    { name: "Manta Ray", image: "assets/img/manta-ray.jpg" },
-    { name: "Moon Bear", image: "assets/img/moon-bear.jpg" },
-    { name: "Octopus", image: "assets/img/octopus.jpg" },
-    { name: "Opossum", image: "assets/img/opossum.jpg" },
-    { name: "Pygmy Marmoset", image: "assets/img/pigmy-marmoset.jpg" },
-    { name: "Pine Marten", image: "assets/img/pine-marten.jpg" },
-    { name: "Red Panda", image: "assets/img/red-panda.jpg" },
-    { name: "Spectacled Owl", image: "assets/img/spectacled-owl.jpg" },
-    { name: "Weasel", image: "assets/img/weasel.jpg" },
-    { name: "Wolverine", image: "assets/img/wolverine.jpg" }
+    { name: "Albatross", image: "assets/img/albatross.jpg", on: "assets/img/albatross-on.png", off: "assets/img/albatross-off.png" },
+    { name: "Baboon", image: "assets/img/baboon.jpg", on: "assets/img/baboon-on.png", off: "assets/img/baboon-off.png"}
 ];
 
 function showGameMessage(message) {
@@ -51,23 +32,18 @@ function showGameMessage(message) {
 
     gameMessage.appendChild(span);
     gameMessage.appendChild(document.createElement("br"));
+
     gameMessage.classList.remove("hidden");
     gameMessage.style.opacity = "1";
 
-    // Schedule fade-out after 3 seconds
+    // Ensure only the last call sets the timeout
     gameMessage.hideTimeout = setTimeout(() => {
         gameMessage.style.opacity = "0";
 
-        // Remove only this specific message after fading out
         setTimeout(() => {
-            if (span.parentNode) {
-                span.parentNode.removeChild(span);
-            }
-
-            // If no messages remain, hide the container
-            if (!gameMessage.querySelector(".game-message")) {
-                gameMessage.classList.add("hidden");
-            }
+            // Remove all messages when fading completes
+            gameMessage.innerHTML = ""; 
+            gameMessage.classList.add("hidden");
         }, 500);
     }, 3000);
 }
@@ -76,7 +52,7 @@ function drawUiElements() {
   console.log("Draw game elements");
 
   const user = netlifyIdentity.currentUser();
-  const elementIds = ["solvedPuzzlesListContainer", "loggedInContent", "mistakeContainer"];
+  const elementIds = ["solvedPuzzlesListContainer", "loggedInContent", "mistakeContainer", "puzzleProgressContainer"];
 
   elementIds.forEach(id => {
     const element = document.getElementById(id);
@@ -98,6 +74,12 @@ function drawUiElements() {
       netlifyIdentity.open();
     });
   }
+
+  // Load correct user's solved puzzles
+  displaySolvedPuzzlesList();
+
+  // Display currently solved puzzles icons
+  displaySolvedPuzzlesIcons();
 }
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -117,9 +99,6 @@ document.addEventListener("DOMContentLoaded", function () {
       console.log("[netlify > login] User logged in", user);
 
       drawUiElements();
-
-      // Load correct user's solved puzzles
-      displaySolvedPuzzles();
 
       // Attempt to load a puzzle if one not in progress
       let userEmail = user.email;
@@ -175,9 +154,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
           loadNextPuzzle();
         }
-
-        // Load correct user's solved puzzles
-        displaySolvedPuzzles();
 
         // Show correct identity button
         document.getElementById("identityButton").innerText = "Log Out";
@@ -272,9 +248,11 @@ function updateSolvedPuzzles(puzzleName) {
     }
 }
 
-// Display solved puzzles
-function displaySolvedPuzzles() {
+// Display solved puzzles list
+function displaySolvedPuzzlesList() {
     const user = netlifyIdentity.currentUser();
+    if (!user) return;
+
     const solvedPuzzlesList = document.getElementById("solvedPuzzlesList");
     solvedPuzzlesList.innerHTML = "";
 
@@ -285,6 +263,29 @@ function displaySolvedPuzzles() {
         const listItem = document.createElement("li");
         listItem.textContent = puzzle;
         solvedPuzzlesList.appendChild(listItem);
+    });
+}
+
+// Update grid with puzzles progresion
+function displaySolvedPuzzlesIcons() {
+    const user = netlifyIdentity.currentUser();
+    if (!user) return;
+
+    let userEmail = user.email;
+    let userData = JSON.parse(localStorage.getItem(userEmail)) || { solvedPuzzles: [] };
+
+    const progressGrid = document.getElementById("puzzleProgressGrid");
+    progressGrid.innerHTML = "";
+
+    puzzles.forEach(puzzle => {
+        const img = document.createElement("img");
+        img.classList.add("puzzle-icon");
+
+        // Check if puzzle is solved
+        const isSolved = userData.solvedPuzzles.includes(puzzle.name);
+        img.src = isSolved ? puzzle.on : puzzle.off;
+
+        progressGrid.appendChild(img);
     });
 }
 
@@ -369,7 +370,8 @@ function checkPuzzleCompletion() {
             // Update local storage
             updateSolvedPuzzles(randomPuzzle.name);
 
-            displaySolvedPuzzles();
+            // Redraw game UI
+            drawUiElements();
 
             // Initialise the mistakes display
             mistakes = 0;

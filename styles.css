@@ -82,7 +82,7 @@ body, html {
 
 .game-container {
   position: relative;
-  margin-top: 20px;
+  margin-top: 100px;
   padding: 20px;
   width: 800px; 
   height: 600px;
@@ -171,6 +171,35 @@ body, html {
 
 #solvedPuzzlesList li:last-child {
     border-bottom: none;
+}
+
+#puzzleProgressContainer {
+    position: fixed;
+    top: 130px;       /* Align it with solved puzzles */
+    left: 20px;       /* Stick to the left */
+    width: 180px;     /* Adjust width for two columns */
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background: rgba(255, 255, 255, 0.8);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    z-index: 999;
+    text-align: center;
+}
+
+#puzzleProgressGrid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* Two columns */
+    gap: 5px;
+    justify-items: center;
+}
+
+.puzzle-icon {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 5px;
+    transition: opacity 0.3s;
 }
 
 .popup {
