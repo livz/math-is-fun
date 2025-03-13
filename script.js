@@ -1,6 +1,6 @@
 // General variables
-const rows = 1;
-const cols = 1;
+const rows = 4;
+const cols = 4;
 const totalTiles = rows * cols;
 
 // Per puzzle variables
@@ -286,7 +286,6 @@ function displaySolvedPuzzlesList() {
     });
 }
 
-// Update grid with puzzles progresion
 function displaySolvedPuzzlesIcons() {
     const user = netlifyIdentity.currentUser();
     if (!user) return;
@@ -298,6 +297,11 @@ function displaySolvedPuzzlesIcons() {
     progressGrid.innerHTML = "";
 
     puzzles.forEach(puzzle => {
+        // Create a wrapper div for positioning
+        const puzzleWrapper = document.createElement("div");
+        puzzleWrapper.classList.add("puzzle-wrapper");
+
+        // Create the image element
         const img = document.createElement("img");
         img.classList.add("puzzle-icon");
 
@@ -305,7 +309,17 @@ function displaySolvedPuzzlesIcons() {
         const isSolved = userData.solvedPuzzles.includes(puzzle.displayName);
         img.src = isSolved ? `assets/img/${puzzle.fileName}-on.png` : `assets/img/${puzzle.fileName}-off.png`;
 
-        progressGrid.appendChild(img);
+        puzzleWrapper.appendChild(img);
+
+        // If unsolved, add a lock emoji overlay
+        if (!isSolved) {
+            const lockOverlay = document.createElement("div");
+            lockOverlay.classList.add("lock-overlay");
+            lockOverlay.textContent = "🔒"; // Lock emoji
+            puzzleWrapper.appendChild(lockOverlay);
+        }
+
+        progressGrid.appendChild(puzzleWrapper);
     });
 }
 
@@ -352,7 +366,7 @@ function loadGameState() {
   background.innerHTML = "";  // Clear game area
 
   randomPuzzle = puzzles.find(p => p.displayName === savedState.puzzleName);
-  background.style.backgroundImage = `url('${randomPuzzle.fileName}.png')`;
+  background.style.backgroundImage = `url('assets/img/${randomPuzzle.fileName}.png')`;
 
   mistakes = savedState.mistakes;
   updateMistakesDisplay();
