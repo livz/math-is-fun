@@ -411,7 +411,10 @@ function checkPuzzleCompletion() {
             mistakes = 0;
             updateMistakesDisplay();
 
-            loadNextPuzzle();
+            // Wait a bit to admire the solved puzzle
+            setTimeout(() => {
+                loadNextPuzzle();
+            }, 3000);
 
             // Need to re-save the state because it was saved before the timeout
             saveGameState();
