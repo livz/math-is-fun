@@ -10,13 +10,33 @@ let solvedTiles = 0;
 
 // Define other wallpapers
 const wallpapers = [
-    { name: "Jungle", image: "assets/img/jungle.jpg"},
+    { displayName: "Jungle", fileName: "jungle"},
 ]
 
 // Define puzzles with names and images
 const puzzles = [
-    { name: "Albatross", image: "assets/img/albatross.jpg", on: "assets/img/albatross-on.png", off: "assets/img/albatross-off.png" },
-    { name: "Baboon", image: "assets/img/baboon.jpg", on: "assets/img/baboon-on.png", off: "assets/img/baboon-off.png"}
+    { displayName: "Albatross", fileName: "albatross" },
+    { displayName: "Baboon", fileName: "baboon" },
+    { displayName: "Bald Eagle", fileName: "bald-eagle" },
+    { displayName: "Blue Whale", fileName: "blue-whale" },
+    { displayName: "Crocodile", fileName: "crocodile" },
+    { displayName: "Elephant", fileName: "elephant" },
+    { displayName: "Giant Squid", fileName: "giant-squid" },
+    { displayName: "Hammerhead Shark", fileName: "hammerhead-shark" },
+    { displayName: "Humpback Whale", fileName: "humpback-whale" },
+    { displayName: "Hummingbird", fileName: "hummingbird" },
+    { displayName: "Koala", fileName: "koala" },
+    { displayName: "Manta Ray", fileName: "manta-ray" },
+    { displayName: "Moon Bear", fileName: "moon-bear" },
+    { displayName: "Octopus", fileName: "octopus" },
+    { displayName: "Opossum", fileName: "opossum" },
+    { displayName: "Pygmy Marmoset", fileName: "pygmy-marmoset" },
+    { displayName: "Pine Marten", fileName: "pine-marten" },
+    { displayName: "Red Panda", fileName: "red-panda" },
+    { displayName: "Ring Tailed Lemur", fileName: "ring-tailed-lemur" },
+    { displayName: "Spectacled Owl", fileName: "spectacled-owl" },
+    { displayName: "Weasel", fileName: "weasel" },
+    { displayName: "Wolverine", fileName: "wolverine" }
 ];
 
 function showGameMessage(message) {
@@ -197,8 +217,8 @@ function startPuzzle(puzzle) {
     const bgElement = document.querySelector(".background");
 
     if (bgElement) {
-        console.log(`Loading puzzle image: ${puzzle.image}`);
-        bgElement.style.backgroundImage = `url('${puzzle.image}')`;
+        console.log(`Loading puzzle image: assets/img/${puzzle.fileName}.png`);
+        bgElement.style.backgroundImage = `url('assets/img/${puzzle.fileName}.png')`;
     }
 
     // Generate grid of calculations
@@ -216,7 +236,7 @@ function loadNextPuzzle() {
     let userData = JSON.parse(localStorage.getItem(userEmail)) || { solvedPuzzles: [] };
 
     // Find an unsolved puzzle
-    let unsolvedPuzzles = puzzles.filter(p => !userData.solvedPuzzles.includes(p.name));
+    let unsolvedPuzzles = puzzles.filter(p => !userData.solvedPuzzles.includes(p.displayName));
     console.log("Unsolved puzzles: ", unsolvedPuzzles);
 
     if (unsolvedPuzzles.length > 0) {
@@ -229,8 +249,8 @@ function loadNextPuzzle() {
 
         // Set the background
         const background = document.querySelector('.background');
-        const jungle = wallpapers.find(p => p.name === "Jungle");
-        background.style.backgroundImage = `url('${jungle.image}')`;
+        const jungle = wallpapers.find(p => p.displayName === "Jungle");
+        background.style.backgroundImage = `url('assets/img/${jungle.fileName}.png')`;
     }
 }
 
@@ -282,8 +302,8 @@ function displaySolvedPuzzlesIcons() {
         img.classList.add("puzzle-icon");
 
         // Check if puzzle is solved
-        const isSolved = userData.solvedPuzzles.includes(puzzle.name);
-        img.src = isSolved ? puzzle.on : puzzle.off;
+        const isSolved = userData.solvedPuzzles.includes(puzzle.displayName);
+        img.src = isSolved ? `assets/img/${puzzle.fileName}-on.png` : `assets/img/${puzzle.fileName}-off.png`;
 
         progressGrid.appendChild(img);
     });
@@ -307,7 +327,7 @@ function saveGameState() {
   }));
 
   userData.gameState = {
-    puzzleName: randomPuzzle.name, // Store current puzzle
+    puzzleName: randomPuzzle.displayName,
     tiles: tiles,
     mistakes: mistakes,
     gameInProgress: solvedTiles < totalTiles
@@ -331,8 +351,8 @@ function loadGameState() {
   const background = document.querySelector('.background');
   background.innerHTML = "";  // Clear game area
 
-  randomPuzzle = puzzles.find(p => p.name === savedState.puzzleName);
-  background.style.backgroundImage = `url('${randomPuzzle.image}')`;
+  randomPuzzle = puzzles.find(p => p.displayName === savedState.puzzleName);
+  background.style.backgroundImage = `url('${randomPuzzle.fileName}.png')`;
 
   mistakes = savedState.mistakes;
   updateMistakesDisplay();
@@ -361,14 +381,14 @@ function checkPuzzleCompletion() {
     console.log(`Checking puzzle completion: ${solvedTiles}/${totalTiles}`);
 
     if (solvedTiles === totalTiles) {
-        console.log("Puzzle Completed:", randomPuzzle.name);
+        console.log("Puzzle Completed:", randomPuzzle.displayName);
 
         // Wait for the last tile's fade-out effect
         setTimeout(() => {
-            showGameMessage(`🎉 Congratulations! You completed ${randomPuzzle.name}.`);
+            showGameMessage(`🎉 Congratulations! You completed ${randomPuzzle.displayName}.`);
 
             // Update local storage
-            updateSolvedPuzzles(randomPuzzle.name);
+            updateSolvedPuzzles(randomPuzzle.displayName);
 
             // Redraw game UI
             drawUiElements();
