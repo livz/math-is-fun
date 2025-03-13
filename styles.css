@@ -175,11 +175,9 @@ body, html {
 
 #puzzleProgressContainer {
     position: fixed;
-    top: 130px;       /* Align it with solved puzzles */
+    top: 80px;       /* Align it with solved puzzles */
     left: 20px;       /* Stick to the left */
     width: 180px;     /* Adjust width for two columns */
-    max-height: 80vh;  /* Limit height to 80% of the viewport */
-    overflow-y: auto;  /* Enable scrolling inside the box */
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 5px;
@@ -192,6 +190,8 @@ body, html {
 #puzzleProgressGrid {
     display: grid;
     grid-template-columns: repeat(2, 1fr); /* Two columns */
+    max-height: 80vh;  /* Limit height to 80% of the viewport */
+    overflow-y: auto;  /* Enable scrolling inside the box */
     gap: 5px;
     justify-items: center;
 }
