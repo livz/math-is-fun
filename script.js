@@ -15,28 +15,60 @@ const wallpapers = [
 
 // Define puzzles with names and images
 const puzzles = [
+    { name: "Albatross", image: "assets/img/albatross.jpg" },
     { name: "Baboon", image: "assets/img/baboon.jpg" },
+    { name: "Bald Eagle", image: "assets/img/bald-eagle.jpg" },
     { name: "Blue Whale", image: "assets/img/blue-whale.jpg" },
+    { name: "Crocodile", image: "assets/img/crocodile.jpeg" },
     { name: "Elephant", image: "assets/img/elephant.jpeg" },
+    { name: "Giant Squid", image: "assets/img/giant-squid.jpeg" },
+    { name: "Hammerhead Shark", image: "assets/img/hammerhead-shark.jpg" },
     { name: "Humpback Whale", image: "assets/img/humpback-whale.jpg" },
+    { name: "Hummingbird", image: "assets/img/hummingbird.jpg" },
+    { name: "Koala", image: "assets/img/koala.jpg" },
+    { name: "Manta Ray", image: "assets/img/manta-ray.jpg" },
     { name: "Moon Bear", image: "assets/img/moon-bear.jpg" },
+    { name: "Octopus", image: "assets/img/octopus.jpg" },
+    { name: "Opossum", image: "assets/img/opossum.jpg" },
     { name: "Pygmy Marmoset", image: "assets/img/pigmy-marmoset.jpg" },
     { name: "Pine Marten", image: "assets/img/pine-marten.jpg" },
     { name: "Red Panda", image: "assets/img/red-panda.jpg" },
+    { name: "Spectacled Owl", image: "assets/img/spectacled-owl.jpg" },
     { name: "Weasel", image: "assets/img/weasel.jpg" },
     { name: "Wolverine", image: "assets/img/wolverine.jpg" }
 ];
 
 function showGameMessage(message) {
     const gameMessage = document.getElementById("gameMessage");
-    gameMessage.textContent = message;
+
+    // Reset any ongoing fade-out
+    clearTimeout(gameMessage.hideTimeout);
+
+    // Append the new message (keeping previous content)
+    const span = document.createElement("span");
+    span.textContent = message;
+    span.classList.add("game-message");
+
+    gameMessage.appendChild(span);
+    gameMessage.appendChild(document.createElement("br"));
     gameMessage.classList.remove("hidden");
     gameMessage.style.opacity = "1";
 
-    // Fade out after 3 seconds
-    setTimeout(() => {
+    // Schedule fade-out after 3 seconds
+    gameMessage.hideTimeout = setTimeout(() => {
         gameMessage.style.opacity = "0";
-        setTimeout(() => gameMessage.classList.add("hidden"), 500); // Hide after fading
+
+        // Remove only this specific message after fading out
+        setTimeout(() => {
+            if (span.parentNode) {
+                span.parentNode.removeChild(span);
+            }
+
+            // If no messages remain, hide the container
+            if (!gameMessage.querySelector(".game-message")) {
+                gameMessage.classList.add("hidden");
+            }
+        }, 500);
     }, 3000);
 }
 
@@ -401,10 +433,10 @@ function submitAnswer() {
     mistakes++; 
     updateMistakesDisplay();
 
-    if (mistakes >= 3) {
-      // No more retries
-      closePopup();
+    // Close the popup
+    closePopup();
 
+    if (mistakes >= 3) {
       // Delay the alert to let the sound play first
       setTimeout(() => {
         alert("Too many mistakes! Loading a new puzzle...");
