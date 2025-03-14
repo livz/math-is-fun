@@ -235,6 +235,8 @@ function startPuzzle(puzzle) {
 
     // Generate grid of calculations
     generateGrid();
+
+    saveGameState();
 }
 
 // Keep track of solved puzzes per user in localStorage
