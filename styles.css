@@ -201,6 +201,16 @@ body, html {
     display: inline-block;
 }
 
+.puzzle-wrapper.unsolved {
+    cursor: pointer; /* Show clickable cursor */
+}
+
+.puzzle-wrapper.unsolved:hover .puzzle-icon {
+    filter: brightness(1.2); /* Slightly brighten */
+    transform: scale(1.1); /* Slightly enlarge */
+    transition: transform 0.2s, filter 0.2s;
+}
+
 .puzzle-icon {
     width: 60px;
     height: 60px;

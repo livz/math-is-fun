@@ -4,7 +4,7 @@ const cols = 4;
 const totalTiles = rows * cols;
 
 // Per puzzle variables
-let randomPuzzle;
+let selectedPuzzle;
 let mistakes = 0;
 let solvedTiles = 0;
 
@@ -102,6 +102,13 @@ function drawUiElements() {
   displaySolvedPuzzlesIcons();
 }
 
+// Set the background
+function setEmptyBg() {
+  const background = document.querySelector('.background');
+  const jungle = wallpapers.find(p => p.displayName === "Jungle");
+  background.style.backgroundImage = `url('assets/img/${jungle.fileName}.png')`;
+}
+
 document.addEventListener("DOMContentLoaded", function () {
 
     // Netlify identity widget
@@ -129,13 +136,11 @@ document.addEventListener("DOMContentLoaded", function () {
         console.log("Restoring saved game state...");
         loadGameState();
       } else {
-        console.log("No saved game in progress. Loading a new puzzle...");
+        console.log("No saved game in progress.");
 
-        // Initialise the mistakes display
-        mistakes = 0;
+        setEmptyBg();
         updateMistakesDisplay();
 
-        loadNextPuzzle();
       }
     });
 
@@ -163,16 +168,14 @@ document.addEventListener("DOMContentLoaded", function () {
 
         // Restore game if one was in progress for the user
         if (savedState && savedState.gameInProgress) {
-          console.log("Restoring saved game state...");
+          console.log("Restoring saved game state.");
           loadGameState();
         } else {
-          console.log("No saved game in progress. Loading a new puzzle...");
+          console.log("No saved game in progress.");
 
-          // Initialise the mistakes display
-          mistakes = 0;
+          setEmptyBg();
           updateMistakesDisplay();
 
-          loadNextPuzzle();
         }
 
         // Show correct identity button
@@ -213,6 +216,11 @@ function closePopup() {
 
 // Start a new puzzle
 function startPuzzle(puzzle) {
+    console.log(`starting ${puzzle.displayName} puzzle`);
+
+    // Set current puzzle
+    selectedPuzzle = puzzle;
+
     // Set background image
     const bgElement = document.querySelector(".background");
 
@@ -223,35 +231,6 @@ function startPuzzle(puzzle) {
 
     // Generate grid of calculations
     generateGrid();
-}
-
-// Load another puzzle, if available
-function loadNextPuzzle() {
-    console.log("Load next puzzle");
-
-    const user = netlifyIdentity.currentUser();
-    if (!user) return;
-
-    let userEmail = user.email;
-    let userData = JSON.parse(localStorage.getItem(userEmail)) || { solvedPuzzles: [] };
-
-    // Find an unsolved puzzle
-    let unsolvedPuzzles = puzzles.filter(p => !userData.solvedPuzzles.includes(p.displayName));
-    console.log("Unsolved puzzles: ", unsolvedPuzzles);
-
-    if (unsolvedPuzzles.length > 0) {
-        // Pick a new puzzle and start it
-        randomPuzzle = unsolvedPuzzles[Math.floor(Math.random() * unsolvedPuzzles.length)];
-        startPuzzle(randomPuzzle);
-    } else {
-        // All puzzles solved
-        showGameMessage(`🎉 Congratulations! You completed all the puzzles`);
-
-        // Set the background
-        const background = document.querySelector('.background');
-        const jungle = wallpapers.find(p => p.displayName === "Jungle");
-        background.style.backgroundImage = `url('assets/img/${jungle.fileName}.png')`;
-    }
 }
 
 // Keep track of solved puzzes per user in localStorage
@@ -313,10 +292,20 @@ function displaySolvedPuzzlesIcons() {
 
         // If unsolved, add a lock emoji overlay
         if (!isSolved) {
+            // Mark as unsolved for styling
+            puzzleWrapper.classList.add("unsolved");
+
+            // Add a lock overlay
             const lockOverlay = document.createElement("div");
             lockOverlay.classList.add("lock-overlay");
             lockOverlay.textContent = "🔒"; // Lock emoji
             puzzleWrapper.appendChild(lockOverlay);
+
+            // Add click event to start that puzzle
+            puzzleWrapper.addEventListener("click", () => {
+                console.log(`Starting puzzle: ${puzzle.displayName}`);
+                startPuzzle(puzzle);
+            });
         }
 
         progressGrid.appendChild(puzzleWrapper);
@@ -341,7 +330,7 @@ function saveGameState() {
   }));
 
   userData.gameState = {
-    puzzleName: randomPuzzle.displayName,
+    puzzleName: selectedPuzzle.displayName,
     tiles: tiles,
     mistakes: mistakes,
     gameInProgress: solvedTiles < totalTiles
@@ -365,8 +354,8 @@ function loadGameState() {
   const background = document.querySelector('.background');
   background.innerHTML = "";  // Clear game area
 
-  randomPuzzle = puzzles.find(p => p.displayName === savedState.puzzleName);
-  background.style.backgroundImage = `url('assets/img/${randomPuzzle.fileName}.png')`;
+  selectedPuzzle = puzzles.find(p => p.displayName === savedState.puzzleName);
+  background.style.backgroundImage = `url('assets/img/${selectedPuzzle.fileName}.png')`;
 
   mistakes = savedState.mistakes;
   updateMistakesDisplay();
@@ -395,14 +384,14 @@ function checkPuzzleCompletion() {
     console.log(`Checking puzzle completion: ${solvedTiles}/${totalTiles}`);
 
     if (solvedTiles === totalTiles) {
-        console.log("Puzzle Completed:", randomPuzzle.displayName);
+        console.log("Puzzle Completed:", selectedPuzzle.displayName);
 
         // Wait for the last tile's fade-out effect
         setTimeout(() => {
-            showGameMessage(`🎉 Congratulations! You completed ${randomPuzzle.displayName}.`);
+            showGameMessage(`🎉 Congratulations! You completed ${selectedPuzzle.displayName}.`);
 
             // Update local storage
-            updateSolvedPuzzles(randomPuzzle.displayName);
+            updateSolvedPuzzles(selectedPuzzle.displayName);
 
             // Redraw game UI
             drawUiElements();
@@ -410,11 +399,6 @@ function checkPuzzleCompletion() {
             // Initialise the mistakes display
             mistakes = 0;
             updateMistakesDisplay();
-
-            // Wait a bit to admire the solved puzzle
-            setTimeout(() => {
-                loadNextPuzzle();
-            }, 3000);
 
             // Need to re-save the state because it was saved before the timeout
             saveGameState();
@@ -478,15 +462,14 @@ function submitAnswer() {
     if (mistakes >= 3) {
       // Delay the alert to let the sound play first
       setTimeout(() => {
-        alert("Too many mistakes! Loading a new puzzle...");
+        alert("Too many mistakes. Try harder!");
 
         // Reset mistakes for the new puzzle
         mistakes = 0;
         updateMistakesDisplay();
 
-        // Load another puzzle
-        loadNextPuzzle();
-      }, 1000); // 1-second delay (adjust as needed)
+        setEmptyBg();
+      }, 1000);
     }
   }
 
