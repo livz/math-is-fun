@@ -1,7 +1,7 @@
 ### Puzzle Safari 🐯
 A Math-Based Animal Discovery Game. **Puzzle Safari** makes math an adventure, turning problem-solving into an exciting way to uncover the animal kingdom - one calculation at a time! View it live at [Puzzle Safari](https://puzzle-safari.netlify.app).
 
-**Overview**
+### Overview
 Puzzle Safari is an interactive, single-player math puzzle game where players solve calculations to unlock vibrant animal images. Designed for learners of all ages, the game enhances arithmetic skills in an engaging way by combining logic, problem-solving, and pattern recognition.
 
 ### Audience
