@@ -218,6 +218,10 @@ function closePopup() {
 function startPuzzle(puzzle) {
     console.log(`starting ${puzzle.displayName} puzzle`);
 
+    // Initialise the mistakes display
+    mistakes = 0;
+    updateMistakesDisplay();
+
     // Set current puzzle
     selectedPuzzle = puzzle;
 
