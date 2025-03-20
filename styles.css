@@ -175,7 +175,7 @@ body, html {
 
 #puzzleProgressContainer {
     position: fixed;
-    top: 80px;       /* Align it with solved puzzles */
+    top: 180px;       /* Align it with solved puzzles */
     left: 20px;       /* Stick to the left */
     width: 180px;     /* Adjust width for two columns */
     padding: 10px;
@@ -190,7 +190,7 @@ body, html {
 #puzzleProgressGrid {
     display: grid;
     grid-template-columns: repeat(2, 1fr); /* Two columns */
-    max-height: 80vh;  /* Limit height to 80% of the viewport */
+    max-height: 60vh;  /* Limit height to 80% of the viewport */
     overflow-y: auto;  /* Enable scrolling inside the box */
     gap: 5px;
     justify-items: center;
@@ -229,6 +229,20 @@ body, html {
     color: rgba(255, 0, 0, 0.8); /* Slightly transparent red */
     text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
     pointer-events: none; /* Prevents clicking the lock */
+}
+
+#scoreBox {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    width: 180px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background: rgba(255, 255, 255, 0.8);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    z-index: 999;
+    text-align: center;
 }
 
 .popup {

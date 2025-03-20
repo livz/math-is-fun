@@ -6,6 +6,8 @@ const totalTiles = rows * cols;
 // Per puzzle variables
 let selectedPuzzle;
 let mistakes = 0;
+let score = 0;
+let streak = 0;
 let solvedTiles = 0;
 
 // Define other wallpapers
@@ -72,7 +74,7 @@ function drawUiElements() {
   console.log("Draw game elements");
 
   const user = netlifyIdentity.currentUser();
-  const elementIds = ["solvedPuzzlesListContainer", "loggedInContent", "mistakeContainer", "puzzleProgressContainer"];
+  const elementIds = ["solvedPuzzlesListContainer", "loggedInContent", "mistakeContainer", "puzzleProgressContainer", "scoreBox"];
 
   elementIds.forEach(id => {
     const element = document.getElementById(id);
@@ -339,6 +341,8 @@ function saveGameState() {
     puzzleName: selectedPuzzle.displayName,
     tiles: tiles,
     mistakes: mistakes,
+    score: score,
+    streak: streak,
     gameInProgress: solvedTiles < totalTiles
   };
 
@@ -431,6 +435,28 @@ function updateMistakesDisplay() {
   }
 }
 
+// Handle score updates
+function updateScoreDisplay(correct) {
+    console.log("Update score")
+
+    if (correct) {
+        streak += 1;
+        score += 1;
+
+        // Bonus for every 5th correct answer in a row
+        if (streak % 5 === 0) {
+            score += 3;
+            showGameMessage(`🔥 Bonus! +3 points for a ${streak}-answer streak!`);
+        }
+    } else {
+        streak = 0; // Reset streak on incorrect answer
+    }
+
+    // Update UI
+    document.getElementById("scoreValue").textContent = score;
+    document.getElementById("streakValue").textContent =streak;
+}
+
 // Function to submit the answer
 function submitAnswer() {
   const popup = document.getElementById('popupForm');
@@ -454,6 +480,9 @@ function submitAnswer() {
 
     solvedTiles++; // Increase solved tile count
 
+    // Update score and streak
+    updateScoreDisplay(true);
+
     checkPuzzleCompletion(); // Check if all tiles are solved
   } else {
     incorrectSound.play();
@@ -461,6 +490,9 @@ function submitAnswer() {
     // Increase mistake count
     mistakes++; 
     updateMistakesDisplay();
+
+    // Update score and streak
+    updateScoreDisplay();
 
     // Close the popup
     closePopup();
@@ -487,8 +519,8 @@ function generateRandomCalculation() {
   const operations = ['x', '÷'];
   const operation = operations[Math.floor(Math.random() * operations.length)];
 
-  const num1 = Math.floor(Math.random() * 10) + 1; // Random number between 1 and 10
-  const num2 = Math.floor(Math.random() * 10) + 1; // Random number between 1 and 10
+  const num1 = Math.floor(Math.random() * 12) + 1; // Random number between 1 and 12
+  const num2 = Math.floor(Math.random() * 12) + 1; // Random number between 1 and 12
   
   let calculation = '';
   let answer = 0;
