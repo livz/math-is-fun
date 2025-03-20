@@ -111,6 +111,7 @@ function setEmptyBg() {
   background.style.backgroundImage = `url('assets/img/${jungle.fileName}.png')`;
 }
 
+// Page load events
 document.addEventListener("DOMContentLoaded", function () {
 
     // Netlify identity widget
@@ -199,11 +200,19 @@ function getRandomColor() {
 
 // Open the question popup
 function openPopup(square) {
+  console.log("Popup for square: ", square);
+
   const popup = document.getElementById('popupForm');
   const questionText = document.getElementById('questionText');
   const userAnswer = document.getElementById('userAnswer');
+
   userAnswer.value = '';
   questionText.textContent = `What is ${square.dataset.calculation}?`;
+
+  // Set the hint as the data attribute of the button
+  const hintButton = document.getElementById('hintButton');
+  hintButton.dataset.hint = square.dataset.hint;
+
   popup.style.display = 'flex';
   popup.dataset.squareId = square.id;
 
@@ -215,6 +224,104 @@ function openPopup(square) {
 function closePopup() {
   document.getElementById('popupForm').style.display = 'none';
 }
+
+// Event listener for the Escape key to close the popup
+document.addEventListener('keydown', (event) => {
+  if (event.key === 'Escape') {
+    closePopup();
+  }
+});
+
+// Generate a random calculation (multiplication and division)
+function generateRandomCalculation() {
+  const operations = ['x', '÷'];
+  const operation = operations[Math.floor(Math.random() * operations.length)];
+
+  const num1 = Math.floor(Math.random() * 12) + 1; // Random number between 1 and 12
+  const num2 = Math.floor(Math.random() * 12) + 1; // Random number between 1 and 12
+
+  let calculation = '';
+  let answer = 0;
+  let hint = '';
+
+  switch (operation) {
+    case 'x':
+      calculation = `${num1} x ${num2}`;
+      answer = num1 * num2;
+      hint = `${num1} x ${num2 - 1} = ${num1 * (num2 - 1)}`;
+      break;
+    case '÷':
+      calculation = `${num1 * num2} ÷ ${num2}`;
+      answer = num1;
+      hint = `${num2 * (num1 - 1)} ÷ ${num2} = ${(num2 * (num1 - 1)) / num2 }`;
+      break;
+  }
+
+  return { calculation, answer, hint };
+}
+
+// Generate the grid of squares with calculations inside
+function generateGrid() {
+  console.log(`Generate a new grid of calculations`);
+
+  // Re-initialise solved puzzles counter
+  solvedTiles = 0;
+
+  const background = document.querySelector('.background');
+
+  // Remove all previous squares
+  background.innerHTML = '';
+
+  for (let i = 0; i < totalTiles; i++) {
+    const square = document.createElement('div');
+    square.classList.add('square');
+    square.id = `square${i + 1}`;
+
+    // Generate a random calculation for each square
+    const { calculation, answer, hint } = generateRandomCalculation();
+
+    square.dataset.calculation = calculation;
+    square.dataset.answer = answer;
+    square.dataset.hint = hint;
+    square.style.backgroundColor = getRandomColor(); // 'transparent' for debugging images
+    square.textContent = calculation;
+    square.addEventListener('click', () => openPopup(square));
+
+    background.appendChild(square);
+  }
+}
+
+// Display the hint tooltip when the user clicks the hint button
+function showHint() {
+  const hint = document.getElementById('hintButton').dataset.hint;
+
+  // Create the tooltip if it doesn't exist yet
+  let tooltip = document.querySelector('.hint-tooltip');
+
+  if (!tooltip) {
+    tooltip = document.createElement('div');
+    tooltip.classList.add('hint-tooltip');
+    document.body.appendChild(tooltip);
+  }
+
+  // Set the hint text
+  tooltip.textContent = hint;
+
+  // Show the tooltip
+  tooltip.style.display = 'block';
+
+  // Hide the tooltip after a short delay
+  setTimeout(() => {
+    tooltip.style.display = 'none';
+  }, 3000);
+}
+
+// Event listener for the Enter key to submit the answer
+document.getElementById('userAnswer').addEventListener('keydown', (event) => {
+  if (event.key === 'Enter') {
+    submitAnswer();
+  }
+});
 
 // Start a new puzzle
 function startPuzzle(puzzle) {
@@ -513,72 +620,3 @@ function submitAnswer() {
 
   saveGameState();
 }
-
-// Generate a random calculation (multiplication and division)
-function generateRandomCalculation() {
-  const operations = ['x', '÷'];
-  const operation = operations[Math.floor(Math.random() * operations.length)];
-
-  const num1 = Math.floor(Math.random() * 12) + 1; // Random number between 1 and 12
-  const num2 = Math.floor(Math.random() * 12) + 1; // Random number between 1 and 12
-  
-  let calculation = '';
-  let answer = 0;
-
-  switch (operation) {
-    case 'x':
-      calculation = `${num1} x ${num2}`;
-      answer = num1 * num2;
-      break;
-    case '÷':
-      calculation = `${num1 * num2} ÷ ${num2}`;
-      answer = num1;
-      break;
-  }
-
-  return { calculation, answer };
-}
-
-// Generate the grid of squares with calculations inside
-function generateGrid() {
-  console.log(`Generate a new grid of calculations`);
-
-  // Re-initialise solved puzzles counter
-  solvedTiles = 0;
-
-  const background = document.querySelector('.background');
-
-  // Remove all previous squares
-  background.innerHTML = '';
-
-  for (let i = 0; i < totalTiles; i++) {
-    const square = document.createElement('div');
-    square.classList.add('square');
-    square.id = `square${i + 1}`;
-
-    // Generate a random calculation for each square
-    const { calculation, answer } = generateRandomCalculation();
-
-    square.dataset.calculation = calculation;
-    square.dataset.answer = answer;
-    square.style.backgroundColor = getRandomColor(); // 'transparent' for debugging images
-    square.textContent = calculation;
-    square.addEventListener('click', () => openPopup(square));
-
-    background.appendChild(square);
-  }
-}
-
-// Event listener for the Enter key to submit the answer
-document.getElementById('userAnswer').addEventListener('keydown', (event) => {
-  if (event.key === 'Enter') {
-    submitAnswer();
-  }
-});
-
-// Event listener for the Escape key to close the popup
-document.addEventListener('keydown', (event) => {
-  if (event.key === 'Escape') {
-    closePopup();
-  }
-});
