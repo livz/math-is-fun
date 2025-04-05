@@ -231,6 +231,37 @@ body, html {
     pointer-events: none; /* Prevents clicking the lock */
 }
 
+#gameTypeSelector {
+    position: fixed;
+    top: 80px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 10px;
+    z-index: 999;
+}
+
+.game-type-btn {
+    padding: 8px 12px;
+    font-size: 14px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    background: #f0f0f0;
+    cursor: pointer;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    transition: background 0.2s;
+}
+
+.game-type-btn:hover {
+    background: #e0e0e0;
+}
+
+.game-type-btn.selected {
+    background: #d0ebff;
+    border-color: #339af0;
+    font-weight: bold;
+}
+
 #scoreBox {
     position: fixed;
     top: 20px;

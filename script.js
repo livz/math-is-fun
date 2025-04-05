@@ -9,6 +9,7 @@ let mistakes = 0;
 let score = 0;
 let streak = 0;
 let solvedTiles = 0;
+let currentGameType = 'mixed';
 
 // Define other wallpapers
 const wallpapers = [
@@ -74,7 +75,7 @@ function drawUiElements() {
   console.log("Draw game elements");
 
   const user = netlifyIdentity.currentUser();
-  const elementIds = ["solvedPuzzlesListContainer", "loggedInContent", "mistakeContainer", "puzzleProgressContainer", "scoreBox"];
+  const elementIds = ["solvedPuzzlesListContainer", "loggedInContent", "mistakeContainer", "puzzleProgressContainer", "scoreBox", "gameTypeSelector"];
 
   elementIds.forEach(id => {
     const element = document.getElementById(id);
@@ -110,6 +111,24 @@ function setEmptyBg() {
   const jungle = wallpapers.find(p => p.displayName === "Jungle");
   background.style.backgroundImage = `url('assets/img/${jungle.fileName}.png')`;
 }
+
+// Handle game selector buttons
+document.querySelectorAll('.game-type-btn').forEach(button => {
+    button.addEventListener('click', () => {
+        // Update game type
+        currentGameType = button.dataset.type;
+        console.log("Game type changed to:", currentGameType);
+
+        // Visually update selected button
+        document.querySelectorAll('.game-type-btn').forEach(btn => btn.classList.remove('selected'));
+        button.classList.add('selected');
+
+        // Restart current puzzle with new game logic
+        if (selectedPuzzle) {
+            startPuzzle(selectedPuzzle);
+        }
+    });
+});
 
 // Page load events
 document.addEventListener("DOMContentLoaded", function () {
@@ -234,26 +253,77 @@ document.addEventListener('keydown', (event) => {
 
 // Generate a random calculation (multiplication and division)
 function generateRandomCalculation() {
-  const operations = ['x', '÷'];
-  const operation = operations[Math.floor(Math.random() * operations.length)];
+  let operations;
 
-  const num1 = Math.floor(Math.random() * 12) + 1; // Random number between 1 and 12
-  const num2 = Math.floor(Math.random() * 12) + 1; // Random number between 1 and 12
+  switch (currentGameType) {
+    case 'addition':
+      operations = ['+'];
+      break;
+    case 'subtraction':
+      operations = ['-'];
+      break;
+    case 'multiplication':
+      operations = ['x'];
+      break;
+    case 'division':
+      operations = ['÷'];
+      break;
+    case 'mixed':
+    default:
+      operations = ['+', '-', 'x', '÷'];
+      break;
+  }
+
+  const operation = operations[Math.floor(Math.random() * operations.length)];
 
   let calculation = '';
   let answer = 0;
   let hint = '';
 
+  let num1, num2;
+
   switch (operation) {
+    case '+':
+      num1 = Math.floor(Math.random() * 100) + 1;
+      num2 = Math.floor(Math.random() * 100) + 1;
+
+      calculation = `${num1} + ${num2}`;
+      answer = num1 + num2;
+      hint = `${num1 + (num2 - 1)} + 1 = ${answer}`;
+
+      break;
+
+    case '-':
+      num1 = Math.floor(Math.random() * 100) + 1;
+      num2 = Math.floor(Math.random() * 100) + 1;
+
+      const bigger = Math.max(num1, num2);
+      const smaller = Math.min(num1, num2);
+
+      calculation = `${bigger} - ${smaller}`;
+      answer = bigger - smaller;
+      hint = `${bigger} - ${smaller - 1} = ${bigger - (smaller - 1)}`;
+
+      break;
+
     case 'x':
+      num1 = Math.floor(Math.random() * 12) + 1;
+      num2 = Math.floor(Math.random() * 12) + 1;
+
       calculation = `${num1} x ${num2}`;
       answer = num1 * num2;
       hint = `${num1} x ${num2 - 1} = ${num1 * (num2 - 1)}`;
+
       break;
+
     case '÷':
+      num1 = Math.floor(Math.random() * 12) + 1;
+      num2 = Math.floor(Math.random() * 12) + 1;
+
       calculation = `${num1 * num2} ÷ ${num2}`;
       answer = num1;
-      hint = `${num2 * (num1 - 1)} ÷ ${num2} = ${(num2 * (num1 - 1)) / num2 }`;
+      hint = `${num2 * (num1 - 1)} ÷ ${num2} = ${(num2 * (num1 - 1)) / num2}`;
+
       break;
   }
 
