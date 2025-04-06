@@ -236,7 +236,6 @@ function openGeronimoPopup(square, questionObj) {
   popup.style.display = 'flex';
 
   // Save context for use in submitAnswer
-  popup.dataset.correctAnswer = questionObj.correct;
   popup.dataset.squareId = square.id;
 }
 
@@ -271,7 +270,10 @@ function generateGeronimoGrid() {
 
     // Store question in dataset
     square.dataset.questionObj = JSON.stringify(questionObj);
-    square.dataset.answer = questionObj.answer;
+
+    const correctIndex = questionObj.answerIndex;
+    square.dataset.answer = questionObj.options[correctIndex];
+
     square.style.backgroundColor = getRandomColor();
 
     // Add click handler to show the quiz question
@@ -770,7 +772,7 @@ function submitAnswer() {
     const selectedOption = popup.querySelector("input[name='geronimoAnswer']:checked");
     if (!selectedOption) {
       // Show a warning if no answer was selected
-      alert("Please select an answer.");
+      alert("Please select an answer");
       return;
     }
     userAnswer = selectedOption.value;
