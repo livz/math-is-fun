@@ -752,7 +752,7 @@ function updateScoreDisplay(correct) {
         // Bonus for every 5th correct answer in a row
         if (streak % 5 === 0) {
             score += 3;
-            showGameMessage(`🔥 Bonus! +3 points for a ${streak}-answer streak!`);
+            showGameMessage(`🔥 Bonus! +3 points for a 5-answer streak!`);
         }
     } else {
         streak = 0; // Reset streak on incorrect answer
