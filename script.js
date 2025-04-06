@@ -662,6 +662,15 @@ function loadGameState() {
       }
     }
 
+    // Highlight the correct game type button
+    document.querySelectorAll('.game-type-btn').forEach(button => {
+      if (button.dataset.type === currentGameType) {
+        button.classList.add('selected');
+      } else {
+        button.classList.remove('selected');
+      }
+    });
+
     background.appendChild(square);
   });
 }
