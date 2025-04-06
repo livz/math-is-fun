@@ -295,6 +295,36 @@ body, html {
   text-align: center;
 }
 
+.math-popup .popup-content {
+  /* Only apply to math popup */
+}
+
+.geronimo-popup .popup-content {
+  /* Specific styles for Geronimo popup */
+}
+
+/* Question text */
+.popup-content h3 {
+  max-width: 400px;
+  margin: 0 auto;
+  word-wrap: break-word;
+}
+
+.popup-options {
+  display: flex;
+  flex-direction: column; /* Stack options vertically */
+  align-items: flex-start; /* Left align */
+  gap: 0.5em;
+  margin: 1em 0;
+}
+
+.popup-option-label {
+  display: flex;
+  align-items: center;
+  gap: 0.4em;
+  font-size: 1rem;
+}
+
 /* Style the question mark button */
 .hint-button {
   font-size: 16px;
@@ -331,4 +361,12 @@ body, html {
   bottom: 60px;
   left: 50%;
   transform: translateX(-50%);
+}
+
+.geronimo-tile-image {
+  width: 25%;
+  height: 25%;
+  object-fit: contain;
+  object-position: center;
+  border-radius: 5px;
 }

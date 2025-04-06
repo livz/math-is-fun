@@ -42,6 +42,45 @@ const puzzles = [
     { displayName: "Wolverine", fileName: "wolverine" }
 ];
 
+const geronimoPuzzles = [
+  {
+    image: "cheese.png",
+    question: "Who is Geronimo’s number one enemy and editor-in-chief of The Daily Rat?",
+    options: ["Bobby Ratherford", "Sally Ratmousen", "Sophie van der Paws"],
+    answer: "Sally Ratmousen"
+  },
+  {
+    image: "mouse.png",
+    question: "Rebellious and mischievous, he often engages in pranks and schemes that annoy Geronimo.",
+    options: ["Rascal Rattletail", "Slicky Slickwhiskers", "Punk Rat"],
+    answer: "Punk Rat"
+  },
+  {
+    image: "camera.png",
+    question: "Very famous and talented chef, renowned for his culinary genius and celebrity chef persona.",
+    options: ["Spicy McSizzle", "Saucy le Paws", "Basil von Whiskers"],
+    answer: "Saucy le Paws"
+  },
+  {
+    image: "jacket.png",
+    question: "What is the address of The Rodent’s Gazette, Geronimo Stilton’s office in New Mouse City?",
+    options: ["17 Swiss Cheese St.", "9 Brie Blvd.", "5 Cheddar Av."],
+    answer: "17 Swiss Cheese St."
+  },
+  {
+    image: "fridge.png",
+    question: "Briliant detective and close friend of Geronimo, he hasn't missed any of his birthdays.",
+    options: ["Inspector Paws", "Sherlock Bones", "Hercule Poirat"],
+    answer: "Hercule Poirat"
+  },
+  {
+    image: "tower.png",
+    question: "Secret agent and close friend of Geronimo Stilton since elementary school, always wears shades and a trench coat",
+    options: ["Maximilian Shadowtail", "Darius Quickpaws", "Kornelius von Kickpaw"],
+    answer: "Kornelius von Kickpaw"
+  }
+];
+
 function showGameMessage(message) {
     const gameMessage = document.getElementById("gameMessage");
 
@@ -123,6 +162,9 @@ document.querySelectorAll('.game-type-btn').forEach(button => {
         document.querySelectorAll('.game-type-btn').forEach(btn => btn.classList.remove('selected'));
         button.classList.add('selected');
 
+        // Close the question popup, if already open
+        closePopups();
+
         // Restart current puzzle with new game logic
         if (selectedPuzzle) {
             startPuzzle(selectedPuzzle);
@@ -132,30 +174,64 @@ document.querySelectorAll('.game-type-btn').forEach(button => {
 
 // Page load events
 document.addEventListener("DOMContentLoaded", function () {
+  // Netlify identity widget
+  document.getElementById("identityButton").addEventListener("click", () => {
+    netlifyIdentity.open();   // Open the Netlify Identity login/signup modal
+  });
 
-    // Netlify identity widget
-    document.getElementById("identityButton").addEventListener("click", () => {
-      netlifyIdentity.open();   // Open the Netlify Identity login/signup modal
-    });
+  // Initialize Netlify Identity
+  netlifyIdentity.on("init", user => {
+    console.log("[netlify > init] Checking user", user);
+  });
 
-    // Initialize Netlify Identity
-    netlifyIdentity.on("init", user => {
-      console.log("[netlify > init] Checking user", user);
-    });
+  // When a user logs in, show the content
+  netlifyIdentity.on("login", user => {
+    console.log("[netlify > login] User logged in", user);
 
-    // When a user logs in, show the content
-    netlifyIdentity.on("login", user => {
-      console.log("[netlify > login] User logged in", user);
+    drawUiElements();
 
-      drawUiElements();
+    // Attempt to load a puzzle if one not in progress
+    let userEmail = user.email;
+    let userData = JSON.parse(localStorage.getItem(userEmail)) || {};
+    const savedState = userData.gameState;
 
-      // Attempt to load a puzzle if one not in progress
+    if (savedState && savedState.gameInProgress) {
+      console.log("Restoring saved game state...");
+      loadGameState();
+    } else {
+      console.log("No saved game in progress.");
+
+      setEmptyBg();
+      updateMistakesDisplay();
+
+    }
+  });
+
+  // When a user logs out, hide the content
+  netlifyIdentity.on("logout", () => {
+    console.log("[netlify > logout] User logged out");
+
+    // Hide the game area
+    drawUiElements();
+
+    // Closes the modal on logout
+    netlifyIdentity.close();
+  });
+
+  netlifyIdentity.init();
+
+  // Check user status and show/hide elements
+  const user = netlifyIdentity.currentUser();
+  console.log("Page loading. Netlify user: ", user);
+
+  if (user) {
       let userEmail = user.email;
       let userData = JSON.parse(localStorage.getItem(userEmail)) || {};
       const savedState = userData.gameState;
 
+      // Restore game if one was in progress for the user
       if (savedState && savedState.gameInProgress) {
-        console.log("Restoring saved game state...");
+        console.log("Restoring saved game state.");
         loadGameState();
       } else {
         console.log("No saved game in progress.");
@@ -164,48 +240,118 @@ document.addEventListener("DOMContentLoaded", function () {
         updateMistakesDisplay();
 
       }
-    });
 
-    // When a user logs out, hide the content
-    netlifyIdentity.on("logout", () => {
-      console.log("[netlify > logout] User logged out");
+      // Show correct identity button
+      document.getElementById("identityButton").innerText = "Log Out";
+  }
 
-      // Hide the game area
-      drawUiElements();
+  drawUiElements();
+});
 
-      // Closes the modal on logout
-      netlifyIdentity.close();
-    });
+// Event listener for the Escape key to close the popups
+document.addEventListener('keydown', (event) => {
+  if (event.key === 'Escape') {
+    closePopups();
+  }
+});
 
-    netlifyIdentity.init();
+// Event listener for the Enter key to submit the answer
+document.addEventListener('keydown', (event) => {
+  if (event.key === 'Enter') {
+    const mathPopup = document.getElementById('mathPopup');
+    const geronimoPopup = document.getElementById('geronimoPopup');
 
-    // Check user status and show/hide elements
-    const user = netlifyIdentity.currentUser();
-    console.log("Page loading. Netlify user: ", user);
-
-    if (user) {
-        let userEmail = user.email;
-        let userData = JSON.parse(localStorage.getItem(userEmail)) || {};
-        const savedState = userData.gameState;
-
-        // Restore game if one was in progress for the user
-        if (savedState && savedState.gameInProgress) {
-          console.log("Restoring saved game state.");
-          loadGameState();
-        } else {
-          console.log("No saved game in progress.");
-
-          setEmptyBg();
-          updateMistakesDisplay();
-
-        }
-
-        // Show correct identity button
-        document.getElementById("identityButton").innerText = "Log Out";
+    // Only submit if a popup is visible
+    if (mathPopup && mathPopup.style.display === 'flex') {
+      const userInput = document.getElementById('userAnswer');
+      if (userInput === document.activeElement) {
+        // Prevent form submission side effects
+        event.preventDefault();
+        submitAnswer();
+      }
+    } else if (geronimoPopup && geronimoPopup.style.display === 'flex') {
+      event.preventDefault();
+      submitAnswer();
     }
+  }
+});
 
-    drawUiElements();
+// Open the Geronimo question popup
+function openGeronimoPopup(square, questionObj) {
+  const popup = document.getElementById("geronimoPopup");
+  const questionText = document.getElementById("geronimoQuestionText");
+  const optionsContainer = document.getElementById("geronimoOptions");
+
+  questionText.textContent = questionObj.question;
+  optionsContainer.innerHTML = "";
+
+  // Add options
+  questionObj.options.forEach((option) => {
+    const label = document.createElement("label");
+    label.classList.add("popup-option-label");
+
+    const radio = document.createElement("input");
+    radio.type = "radio";
+    radio.name = "geronimoAnswer";
+    radio.value = option;
+
+    label.appendChild(radio);
+    label.appendChild(document.createTextNode(option));
+    optionsContainer.appendChild(label);
   });
+
+  // Show popup
+  popup.style.display = 'flex';
+  popup.dataset.squareId = square.id;
+
+  // Save context for use in submitAnswer
+  popup.dataset.correctAnswer = questionObj.correct;
+  popup.dataset.squareId = square.id;
+}
+
+// Generate a random Geronimo question
+function generateGeronimoPuzzle() {
+  const randomIndex = Math.floor(Math.random() * geronimoPuzzles.length);
+
+  return geronimoPuzzles[randomIndex];
+}
+
+function generateGeronimoGrid() {
+  console.log(`Generate a new grid of Geronimo questions`);
+
+  // Re-initialise solved puzzles counter
+  solvedTiles = 0;
+
+  const background = document.querySelector('.background');
+
+  // Clear any previous content
+  background.innerHTML = '';
+
+  for (let i = 0; i < totalTiles; i++) {
+    const square = document.createElement('div');
+    square.classList.add('square');
+    square.id = `square${i + 1}`;
+
+    // Generate a random Geronimo puzzle (image + question)
+    const questionObj = generateGeronimoPuzzle();
+
+    // Render the image in the tile
+    square.innerHTML = `<img src="assets/geronimo/${questionObj.image}" class="geronimo-tile-image">`;
+
+    // Store question metadata in dataset
+    square.dataset.question = questionObj.question;
+    square.dataset.options = JSON.stringify(questionObj.options);
+    square.dataset.answer = questionObj.answer;
+    square.style.backgroundColor = getRandomColor();
+
+    // Add click handler to show the quiz question
+    square.addEventListener('click', () => {
+      openGeronimoPopup(square, questionObj);
+    });
+
+    background.appendChild(square);
+  }
+}
 
 // Function to generate a random color
 function getRandomColor() {
@@ -217,11 +363,11 @@ function getRandomColor() {
   return color;
 }
 
-// Open the question popup
-function openPopup(square) {
+// Open the math question popup
+function openMathPopup(square) {
   console.log("Popup for square: ", square);
 
-  const popup = document.getElementById('popupForm');
+  const popup = document.getElementById('mathPopup');
   const questionText = document.getElementById('questionText');
   const userAnswer = document.getElementById('userAnswer');
 
@@ -232,24 +378,13 @@ function openPopup(square) {
   const hintButton = document.getElementById('hintButton');
   hintButton.dataset.hint = square.dataset.hint;
 
+  // Show popup
   popup.style.display = 'flex';
   popup.dataset.squareId = square.id;
 
   // Focus the answer input field when the popup opens
   userAnswer.focus();
 }
-
-// Close the popup
-function closePopup() {
-  document.getElementById('popupForm').style.display = 'none';
-}
-
-// Event listener for the Escape key to close the popup
-document.addEventListener('keydown', (event) => {
-  if (event.key === 'Escape') {
-    closePopup();
-  }
-});
 
 // Generate a random calculation (multiplication and division)
 function generateRandomCalculation() {
@@ -331,7 +466,7 @@ function generateRandomCalculation() {
 }
 
 // Generate the grid of squares with calculations inside
-function generateGrid() {
+function generateCalculationGrid() {
   console.log(`Generate a new grid of calculations`);
 
   // Re-initialise solved puzzles counter
@@ -355,7 +490,7 @@ function generateGrid() {
     square.dataset.hint = hint;
     square.style.backgroundColor = getRandomColor(); // 'transparent' for debugging images
     square.textContent = calculation;
-    square.addEventListener('click', () => openPopup(square));
+    square.addEventListener('click', () => openMathPopup(square));
 
     background.appendChild(square);
   }
@@ -386,12 +521,28 @@ function showHint() {
   }, 3000);
 }
 
-// Event listener for the Enter key to submit the answer
-document.getElementById('userAnswer').addEventListener('keydown', (event) => {
-  if (event.key === 'Enter') {
-    submitAnswer();
+function generateGrid(gameType = 'mixed') {
+  console.log(`Generate a new grid for ${gameType} game`);
+
+  const background = document.querySelector('.background');
+
+  // Remove all previous squares
+  background.innerHTML = '';
+
+  // Call the appropriate grid generation function
+  if (currentGameType === 'geronimo') {
+    generateGeronimoGrid();
+  } else {
+    // Default behavior for calculation game
+    generateCalculationGrid();
   }
-});
+}
+
+// Close the popups
+function closePopups() {
+  document.getElementById('mathPopup').style.display = 'none';
+  document.getElementById('geronimoPopup').style.display = 'none';
+}
 
 // Start a new puzzle
 function startPuzzle(puzzle) {
@@ -634,12 +785,35 @@ function updateScoreDisplay(correct) {
     document.getElementById("streakValue").textContent =streak;
 }
 
+function hideTiles() {
+  const squares = document.querySelectorAll('.square');
+  squares.forEach(square => {
+    square.style.visibility = 'hidden'; // Or use display: 'none' to remove them entirely
+  });
+}
+
 // Function to submit the answer
 function submitAnswer() {
-  const popup = document.getElementById('popupForm');
+  const popup = document.getElementById(
+    currentGameType === 'geronimo' ? 'geronimoPopup' : 'mathPopup'
+  );
+
   const squareId = popup.dataset.squareId;
   const square = document.getElementById(squareId);
-  const userAnswer = document.getElementById('userAnswer').value;
+
+  // Get the user's answer based on game type
+  let userAnswer;
+  if (currentGameType === 'geronimo') {
+    const selectedOption = popup.querySelector("input[name='geronimoAnswer']:checked");
+    if (!selectedOption) {
+      // Show a warning if no answer was selected
+      alert("Please select an answer.");
+      return;
+    }
+    userAnswer = selectedOption.value;
+  } else {
+    userAnswer = document.getElementById('userAnswer').value.trim();
+  }
 
   // Define the sounds for correct and incorrect answers
   const correctSound = new Audio('assets/sounds/correct.mp3');
@@ -653,7 +827,7 @@ function submitAnswer() {
 
     square.textContent = '';  // Remove the calculation text from the square
 
-    closePopup();  // Close the popup
+    closePopups();  // Close the popup
 
     solvedTiles++; // Increase solved tile count
 
@@ -672,7 +846,7 @@ function submitAnswer() {
     updateScoreDisplay();
 
     // Close the popup
-    closePopup();
+    closePopups();
 
     if (mistakes >= 3) {
       // Delay the alert to let the sound play first
@@ -682,6 +856,9 @@ function submitAnswer() {
         // Reset mistakes for the new puzzle
         mistakes = 0;
         updateMistakesDisplay();
+
+        // Hide all tiles
+        hideTiles();
 
         setEmptyBg();
       }, 1000);
