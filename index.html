@@ -58,7 +58,7 @@
   <div id="gameTypeSelector">
     <button class="game-type-btn" data-type="multiplication">✖️ Multiplication</button>
     <button class="game-type-btn" data-type="division">➗ Division</button>
-    <button class="game-type-btn" data-type="addition">➗ Addition</button>
+    <button class="game-type-btn" data-type="addition">➕ Addition</button>
     <button class="game-type-btn" data-type="subtraction">➖ Subtraction</button>
     <button class="game-type-btn" data-type="mixed">📝 Mixed</button>
     <button class="game-type-btn" data-type="geronimo">🐭 Geronimo</button>
@@ -67,8 +67,9 @@
   <!-- Popup for calculation questions -->
   <div id="mathPopup" class="popup math-popup">
     <div class="popup-content">
-      <h3 id="questionText">Math Question</h3>
+      <h3 aria-live="polite" id="questionText">Math Question</h3>
       <input type="text" id="userAnswer" placeholder="Enter your answer">
+      <button id="readQuestionBtn" aria-label="Read Question" class="read-question-btn">🗣️</button>
       <button onclick="submitAnswer()">Submit</button>
       <button onclick="closePopups()">Cancel</button>
       <!-- Question Mark Button -->
@@ -79,11 +80,13 @@
   <!-- Popup for Geronimo questions -->
   <div id="geronimoPopup" class="popup geronimo-popup">
     <div class="popup-content">
-      <h3 id="geronimoQuestionText">Question</h3>
+      <h3 aria-live="polite" id="geronimoQuestionText">Question</h3>
       <div id="geronimoDifficulty" class="difficulty-display">🐭🐭🐭</div>
       <div id="geronimoOptions" class="popup-options">
         <!-- Radio options inserted dynamically -->
       </div>
+      <!-- Read Question Button (Emoji) -->
+      <button id="readGeronimoQuestionBtn" aria-label="Read Question" class="read-question-btn">🗣️</button>
       <button onclick="submitAnswer()">Submit</button>
       <button onclick="closePopups()">Cancel</button>
     </div>

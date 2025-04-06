@@ -293,6 +293,7 @@ body, html {
   padding: 20px;
   border-radius: 5px;
   text-align: center;
+  position: relative;
 }
 
 .math-popup .popup-content {
@@ -379,4 +380,15 @@ body, html {
 .difficulty-display .inactive {
   filter: grayscale(100%);
   opacity: 0.4;
+}
+
+.read-question-btn {
+  font-size: 24px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 10px;
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
 }

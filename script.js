@@ -208,6 +208,15 @@ document.addEventListener('keydown', (event) => {
   }
 });
 
+// Event listener to the Read Question buttons
+document.getElementById('readQuestionBtn').addEventListener('click', function() {
+  readQuestion();
+});
+
+document.getElementById('readGeronimoQuestionBtn').addEventListener('click', function() {
+  readQuestion();
+});
+
 // Render difficulty using mouse emojis
 function updateDifficultyDisplay(level) {
   const container = document.getElementById("geronimoDifficulty");
@@ -849,4 +858,34 @@ function submitAnswer() {
   }
 
   saveGameState();
+}
+
+/* Read questions text */
+function readQuestion() {
+  let questionText = currentGameType === 'geronimo'
+    ? document.getElementById('geronimoQuestionText').textContent
+    : document.getElementById('questionText').textContent;
+
+  // Replace math operators with their verbal equivalents
+  questionText = questionText
+    .replace(/\+/g, ' plus ')
+    .replace(/-/g, ' minus ')
+    .replace(/\*/g, ' times ')
+    .replace(/\//g, ' divided by ')
+    .replace(/÷/g, ' divided by ')
+    .replace(/=/g, ' equals ');
+
+  // Reading the question text
+  const question = new SpeechSynthesisUtterance(questionText);
+  speechSynthesis.speak(question);
+
+  // If it's a Geronimo question, read the options as well
+  if (currentGameType === 'geronimo') {
+    const optionsContainer = document.getElementById('geronimoOptions');
+    const options = Array.from(optionsContainer.querySelectorAll('label')).map(option => option.textContent);
+    options.forEach(option => {
+      const optionUtterance = new SpeechSynthesisUtterance(option);
+      speechSynthesis.speak(optionUtterance);
+    });
+  }
 }
