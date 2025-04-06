@@ -67,26 +67,24 @@
   <!-- Popup for calculation questions -->
   <div id="mathPopup" class="popup math-popup">
     <div class="popup-content">
+      <button id="readQuestionBtn" aria-label="Read Question" class="emoji-btn voice-over-btn">🗣️</button>
       <h3 aria-live="polite" id="questionText">Math Question</h3>
       <input type="text" id="userAnswer" placeholder="Enter your answer">
-      <button id="readQuestionBtn" aria-label="Read Question" class="read-question-btn">🗣️</button>
       <button onclick="submitAnswer()">Submit</button>
       <button onclick="closePopups()">Cancel</button>
-      <!-- Question Mark Button -->
-      <button id="hintButton" class="hint-button" onclick="showHint()">?</button>
+      <button id="hintButton" class="emoji-btn hint-btn" onclick="showHint()" aria-label="Hint">💡</button>
     </div>
   </div>
 
   <!-- Popup for Geronimo questions -->
   <div id="geronimoPopup" class="popup geronimo-popup">
     <div class="popup-content">
+      <button id="readGeronimoQuestionBtn" aria-label="Read Question" class="emoji-btn voice-over-btn">🗣️</button>
       <h3 aria-live="polite" id="geronimoQuestionText">Question</h3>
       <div id="geronimoDifficulty" class="difficulty-display">🐭🐭🐭</div>
       <div id="geronimoOptions" class="popup-options">
         <!-- Radio options inserted dynamically -->
       </div>
-      <!-- Read Question Button (Emoji) -->
-      <button id="readGeronimoQuestionBtn" aria-label="Read Question" class="read-question-btn">🗣️</button>
       <button onclick="submitAnswer()">Submit</button>
       <button onclick="closePopups()">Cancel</button>
     </div>

@@ -290,7 +290,7 @@ body, html {
 
 .popup-content {
   background-color: white;
-  padding: 20px;
+  padding: 30px;
   border-radius: 5px;
   text-align: center;
   position: relative;
@@ -309,6 +309,7 @@ body, html {
   max-width: 400px;
   margin: 0 auto;
   word-wrap: break-word;
+  padding-bottom: 10px;
 }
 
 .popup-options {
@@ -324,27 +325,6 @@ body, html {
   align-items: center;
   gap: 0.4em;
   font-size: 1rem;
-}
-
-/* Style the question mark button */
-.hint-button {
-  font-size: 16px;
-  width: 40px;
-  height: 40px;
-  margin-top: 10px;
-  margin-left: auto;
-  margin-right: auto;
-  background-color: #f1f1f1;
-  border: 1px solid #ccc;
-  border-radius: 50%;
-  cursor: pointer;
-  font-weight: bold;
-  color: #333;
-  display: block;
-}
-
-.hint-button:hover {
-  background-color: #e0e0e0;
 }
 
 /* Tooltip style for hint display */
@@ -382,13 +362,23 @@ body, html {
   opacity: 0.4;
 }
 
-.read-question-btn {
-  font-size: 24px;
+.emoji-btn {
+  font-size: 18px;
   background: transparent;
   border: none;
   cursor: pointer;
   padding: 10px;
   position: absolute;
-  bottom: 10px;
-  left: 10px;
+}
+
+/* Voice-over button */
+.voice-over-btn {
+  top: -5px;
+  left: -5px;
+}
+
+/* Hint button */
+.hint-btn {
+  top: -5px;
+  right: -5px;
 }
