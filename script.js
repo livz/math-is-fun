@@ -234,7 +234,6 @@ function openGeronimoPopup(square, questionObj) {
 
   // Show popup
   popup.style.display = 'flex';
-  popup.dataset.squareId = square.id;
 
   // Save context for use in submitAnswer
   popup.dataset.correctAnswer = questionObj.correct;
@@ -270,9 +269,8 @@ function generateGeronimoGrid() {
     // Render the image in the tile
     square.innerHTML = `<img src="assets/geronimo/${questionObj.image}" class="geronimo-tile-image">`;
 
-    // Store question metadata in dataset
-    square.dataset.question = questionObj.question;
-    square.dataset.options = JSON.stringify(questionObj.options);
+    // Store question in dataset
+    square.dataset.questionObj = JSON.stringify(questionObj);
     square.dataset.answer = questionObj.answer;
     square.style.backgroundColor = getRandomColor();
 
@@ -589,15 +587,22 @@ function saveGameState() {
   let userEmail = user.email;
   let userData = JSON.parse(localStorage.getItem(userEmail)) || { solvedPuzzles: [], gameState: null };
 
+  document.querySelectorAll(".square").forEach(square => {
+    console.log(`Square ID: ${square.id}`);
+    console.log(square.dataset);
+  });
+
   const tiles = Array.from(document.querySelectorAll(".square")).map(square => ({
     id: square.id,
     calculation: square.dataset.calculation,
+    questionObj: square.dataset.questionObj ? JSON.parse(square.dataset.questionObj) : null,
     answer: square.dataset.answer,
     color: square.style.backgroundColor,
     solved: square.classList.contains("fade-out") // Mark if tile was solved
   }));
 
   userData.gameState = {
+    gameType: currentGameType,
     puzzleName: selectedPuzzle.displayName,
     tiles: tiles,
     mistakes: mistakes,
@@ -630,11 +635,15 @@ function loadGameState() {
   mistakes = savedState.mistakes;
   updateMistakesDisplay();
 
+  // Restore correct game type
+  currentGameType = savedState.gameType;
+
   savedState.tiles.forEach(tileData => {
     const square = document.createElement("div");
     square.classList.add("square");
     square.id = tileData.id;
     square.style.backgroundColor = tileData.color;
+    square.dataset.questionObj = JSON.stringify(tileData.questionObj);
     square.dataset.calculation = tileData.calculation;
     square.dataset.answer = tileData.answer;
     square.textContent = tileData.solved ? "" : tileData.calculation; // Hide if solved
@@ -642,7 +651,15 @@ function loadGameState() {
     if (tileData.solved) {
       square.classList.add("fade-out"); // Keep it hidden
     } else {
-      square.addEventListener("click", () => openPopup(square));
+      // Open the correct popup based on the game type
+      if (savedState.gameType === 'geronimo') {
+        // Restore question image
+        square.innerHTML = `<img src="assets/geronimo/${tileData.questionObj.image}" class="geronimo-tile-image">`;
+
+        square.addEventListener("click", () => openGeronimoPopup(square, tileData.questionObj));
+      } else {
+        square.addEventListener("click", () => openMathPopup(square));
+      }
     }
 
     background.appendChild(square);
@@ -726,9 +743,14 @@ function hideTiles() {
 
 // Function to submit the answer
 function submitAnswer() {
+  console.log("Submit answer for game type: ", currentGameType);
+
   const popup = document.getElementById(
     currentGameType === 'geronimo' ? 'geronimoPopup' : 'mathPopup'
   );
+
+  console.log("Current popup:");
+  console.log(popup);
 
   const squareId = popup.dataset.squareId;
   const square = document.getElementById(squareId);
