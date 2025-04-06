@@ -102,5 +102,47 @@ const geronimoPuzzles = [
     options: ["Prof. von Sparkle", "Dr. Percival Techton", "Prof. von Volt"],
     answer: "Prof. von Volt",
     difficulty: "1"
+  },
+  {
+    image: "mountains.png",
+    question: "Geronimo’s favourite song which he likes to sing in the shower?",
+    options: ["If you’re  joyful and you know it, wiggle your whiskers", "If you’re jolly and you know it, tap your tail", "If you’re happy and you know it clap your paws"],
+    answer: "If you’re happy and you know it clap your paws",
+    difficulty: "3"
+  },
+  {
+    image: "moai.png",
+    question: "Geronimo solves the mystery of the talking lion statue. Where was that?",
+    options: ["Trafalgar Square", "Leicester Square", "Parliament Square"],
+    answer: "Trafalgar Square",
+    difficulty: "2"
+  },
+  {
+    image: "spy.png",
+    question: "Loud and obnoxious, he loves playing pranks and thinks he’s a great cook",
+    options: ["Alfredo Cat", "Benjamin Stilton", "Trap Stilton"],
+    answer: "Trap Stilton",
+    difficulty: "1"
+  },
+  {
+    image: "lion.png",
+    question: "Very pretty mouse, who is kind and caring and Geronimo has a crush on her",
+    options: ["Fiona Furryfeet", "Rosie Cuddlepaws", "Petunia Prettypaws"],
+    answer: "Petunia Prettypaws",
+    difficulty: "1"
+  },
+  {
+    image: "cat.png",
+    question: "Funny name invented by Trap, but definitely not funny for Geronimo",
+    options: ["Merry Gerry", "Gerry Huckleberry", "Gerry Berry"],
+    answer: "Gerry Berry",
+    difficulty: "2"
+  },
+  {
+    image: "cake.png",
+    question: "Extremely greedy, and obsessed with saving money, he only washes his teeth once per week to save money",
+    options: ["Samuel S. Stingysnout", "Matilda M. Munchmouser", "Penelope P. Pennywise"],
+    answer: "Samuel S. Stingysnout",
+    difficulty: "3"
   }
 ];
