@@ -165,5 +165,47 @@ const geronimoPuzzles = [
     options: ["New Mouse City Cheese Eating Contest", "New Mouse City Boxing Contest", "New Mouse City Marathon"],
     answerIndex: 2,
     difficulty: 3
+  },
+  {
+    image: "flippers.png",
+    question: "Geronimo accidentally ends up on a school trip where he gets very little sleep but saves Punk Rat from drowning",
+    options: ["Niagara Falls", "Grand Canyon", "Easter Island"],
+    answerIndex: 0,
+    difficulty: 3
+  },
+  {
+    image: "stopwatch.png",
+    question: "She always forgets things like her glasses and mobile but never forgets Geronimo’s birthday",
+    options: ["Grandma Buttersqueak", "Uncle Whiskertail", "Aunt Sweetfur"],
+    answerIndex: 2,
+    difficulty: 2
+  },
+  {
+    image: "goggles.png",
+    question: "Young and clever, she’s an editor at Geronimo’s Gazette and likes to call him funny names",
+    options: ["Popsy Wopsy", "Pinky Pick", "Rosie McFun"],
+    answerIndex: 1,
+    difficulty: 1
+  },
+  {
+    image: "palm-tree.png",
+    question: "What was the lost treasure of the Emerald Eye?",
+    options: ["A treasure shaped as an eye", "A big eye made of chocolate", "A  green lake in the middle of an oval island"],
+    answerIndex: 2,
+    difficulty: 3
+  },
+  {
+    image: "burger.png",
+    question: "What food does Trap like to cook that always gives Geronimo stomach aches?",
+    options: ["Fried bananas", "Cheesecake", "Mussels"],
+    answerIndex: 2,
+    difficulty: 2
+  },
+  {
+    image: "money.png",
+    question: "Who is always making Geronimo pay for stuff when they go on trips together?",
+    options: ["His nephew Benjamin", "His cousin Trap", "His secretary Mousella"],
+    answerIndex: 1,
+    difficulty: 1
   }
 ];
