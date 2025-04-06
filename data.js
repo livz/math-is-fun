@@ -144,5 +144,26 @@ const geronimoPuzzles = [
     options: ["Samuel S. Stingysnout", "Matilda M. Munchmouser", "Penelope P. Pennywise"],
     answerIndex: 0,
     difficulty: 3
+  },
+  {
+    image: "truck.png",
+    question: "Precious object that Geronimo lost on Xmas day (and found with the help of agents 00K and 00V)",
+    options: ["A treasure map", "A sealed envelope", "A photo of Benjamin when he was little"],
+    answerIndex: 1,
+    difficulty: 1
+  },
+  {
+    image: "bathtub.png",
+    question: "Very strict and bossy, founder of  The Rodent's Gazette",
+    options: ["Geronimo’s teacher Walter Whiskerpaws", "Geronimo’s grandfather William Shortpaws", "Geronimo’s cousin Waldo Whiskerwink"],
+    answerIndex: 1,
+    difficulty: 2
+  },
+  {
+    image: "fan.png",
+    question: "Despite not being a great athlete, Geronimo trained and won a very important race",
+    options: ["New Mouse City Cheese Eating Contest", "New Mouse City Boxing Contest", "New Mouse City Marathon"],
+    answerIndex: 2,
+    difficulty: 3
   }
 ];

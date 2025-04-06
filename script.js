@@ -208,6 +208,21 @@ document.addEventListener('keydown', (event) => {
   }
 });
 
+// Render difficulty using mouse emojis
+function updateDifficultyDisplay(level) {
+  const container = document.getElementById("geronimoDifficulty");
+  container.innerHTML = '';
+
+  for (let i = 1; i <= 3; i++) {
+    const mouse = document.createElement('span');
+    mouse.textContent = '🐭';
+    if (i > level) {
+      mouse.classList.add('inactive');
+    }
+    container.appendChild(mouse);
+  }
+}
+
 // Open the Geronimo question popup
 function openGeronimoPopup(square, questionObj) {
   const popup = document.getElementById("geronimoPopup");
@@ -231,6 +246,9 @@ function openGeronimoPopup(square, questionObj) {
     label.appendChild(document.createTextNode(option));
     optionsContainer.appendChild(label);
   });
+
+  // Update difficulty level
+  updateDifficultyDisplay(Number(questionObj.difficulty));
 
   // Show popup
   popup.style.display = 'flex';

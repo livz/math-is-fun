@@ -370,3 +370,13 @@ body, html {
   object-position: center;
   border-radius: 5px;
 }
+
+.difficulty-display {
+  font-size: 1.5em;
+  margin-bottom: 0.5em;
+}
+
+.difficulty-display .inactive {
+  filter: grayscale(100%);
+  opacity: 0.4;
+}
