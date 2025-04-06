@@ -26,7 +26,17 @@ const puzzles = [
     { displayName: "Ring Tailed Lemur", fileName: "ring-tailed-lemur" },
     { displayName: "Spectacled Owl", fileName: "spectacled-owl" },
     { displayName: "Weasel", fileName: "weasel" },
-    { displayName: "Wolverine", fileName: "wolverine" }
+    { displayName: "Wolverine", fileName: "wolverine" },
+    { displayName: "Lion", fileName: "lion" },
+    { displayName: "Sumatran Tiger", fileName: "sumatran-tiger" },
+    { displayName: "Painted Wolf", fileName: "painted-wolf"},
+    { displayName: "Bat-eared Fox", fileName: "bat-eared-fox"},
+    { displayName: "Dhole", fileName: "dhole"},
+    { displayName: "Malaysian Tapir", fileName: "malaysian-tapir"},
+    { displayName: "African Rhino", fileName: "african-rhino"},
+    { displayName: "Californian Sea Lion", fileName: "californian-sea-lion"},
+    { displayName: "Dolphin", fileName: "dolphin"},
+    { displayName: "Armadillo", fileName: "armadillo"}
 ];
 
 const geronimoPuzzles = [
