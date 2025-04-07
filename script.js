@@ -498,7 +498,7 @@ function showHint() {
   }, 3000);
 
   // Save the game state including updated hints used count
-  //saveGameState();
+  saveGameState();
 }
 
 function generateGrid(gameType = 'mixed') {
@@ -649,6 +649,7 @@ function saveGameState() {
   const tiles = Array.from(document.querySelectorAll(".square")).map(square => ({
     id: square.id,
     calculation: square.dataset.calculation,
+    hint: square.dataset.hint,
     questionObj: square.dataset.questionObj ? JSON.parse(square.dataset.questionObj) : null,
     answer: square.dataset.answer,
     color: square.style.backgroundColor,
@@ -703,6 +704,7 @@ function loadGameState() {
     square.style.backgroundColor = tileData.color;
     square.dataset.questionObj = JSON.stringify(tileData.questionObj);
     square.dataset.calculation = tileData.calculation;
+    square.dataset.hint = tileData.hint;
     square.dataset.answer = tileData.answer;
     square.textContent = tileData.solved ? "" : tileData.calculation; // Hide if solved
 
