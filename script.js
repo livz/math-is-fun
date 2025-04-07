@@ -153,6 +153,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Closes the modal on logout
     netlifyIdentity.close();
+
+    // Close any remaining popups
+    closePopups();
   });
 
   netlifyIdentity.init();
