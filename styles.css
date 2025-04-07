@@ -67,7 +67,7 @@ body, html {
 
 #mistakesDisplay {
     display: flex;
-    gap: 10px;  /* Space between X's */
+    gap: 20px;  /* Space between X's */
     font-size: 24px;
 }
 
@@ -78,6 +78,41 @@ body, html {
 
 .mistake-x.filled {
     color: red;
+}
+
+#hintContainer {
+  position: fixed;
+  top: 130px;
+  right: 20px;
+  width: 100px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background: rgba(255, 255, 255, 0.8);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  z-index: 999;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+#hintsDisplay {
+  display: flex;
+  gap: 6px;        /* Space between lightbulbs */
+  font-size: 24px;
+}
+
+.hint-bulb {
+  font-weight: bold;
+  padding: 2px;
+  border-radius: 50%;
+  background: gray;
+}
+
+.hint-bulb.active {
+  background: #f5c518;
 }
 
 .game-container {
@@ -147,7 +182,7 @@ body, html {
 
 #solvedPuzzlesListContainer {
     position: fixed;  /* Fix the position relative to the viewport */
-    top: 130px;        /* Position it below the identity button */
+    top: 195px;
     right: 20px;      /* Align it with the identity button */
     width: 220px;     /* Set a fixed width */
     padding: 10px;

@@ -3,9 +3,13 @@ const rows = 4;
 const cols = 4;
 const totalTiles = rows * cols;
 
+const MAX_HINTS = 3;
+const MAX_MISTAKES = 3;
+
 // Per puzzle variables
 let selectedPuzzle;
 let mistakes = 0;
+let hintsUsed = 0;
 let score = 0;
 let streak = 0;
 let solvedTiles = 0;
@@ -46,7 +50,7 @@ function drawUiElements() {
   console.log("Draw game elements");
 
   const user = netlifyIdentity.currentUser();
-  const elementIds = ["solvedPuzzlesListContainer", "loggedInContent", "mistakeContainer", "puzzleProgressContainer", "scoreBox", "gameTypeSelector"];
+  const elementIds = ["solvedPuzzlesListContainer", "loggedInContent", "mistakeContainer", "hintContainer", "puzzleProgressContainer", "scoreBox", "gameTypeSelector"];
 
   elementIds.forEach(id => {
     const element = document.getElementById(id);
@@ -134,8 +138,9 @@ document.addEventListener("DOMContentLoaded", function () {
       console.log("No saved game in progress.");
 
       setEmptyBg();
-      updateMistakesDisplay();
 
+      updateMistakesDisplay();
+      updateHintsDisplay();
     }
   });
 
@@ -169,8 +174,9 @@ document.addEventListener("DOMContentLoaded", function () {
         console.log("No saved game in progress.");
 
         setEmptyBg();
-        updateMistakesDisplay();
 
+        updateHintsDisplay();
+        updateMistakesDisplay();
       }
 
       // Show correct identity button
@@ -457,6 +463,15 @@ function generateCalculationGrid() {
 
 // Display the hint tooltip when the user clicks the hint button
 function showHint() {
+  if (hintsUsed >= MAX_HINTS) {
+    alert("No more hints left!");
+    return;
+  }
+
+  // Hint used. Update the display
+  hintsUsed++;
+  updateHintsDisplay();
+
   const hint = document.getElementById('hintButton').dataset.hint;
 
   // Create the tooltip if it doesn't exist yet
@@ -478,6 +493,9 @@ function showHint() {
   setTimeout(() => {
     tooltip.style.display = 'none';
   }, 3000);
+
+  // Save the game state including updated hints used count
+  //saveGameState();
 }
 
 function generateGrid(gameType = 'mixed') {
@@ -506,6 +524,10 @@ function closePopups() {
 // Start a new puzzle
 function startPuzzle(puzzle) {
     console.log(`starting ${puzzle.displayName} puzzle`);
+
+    // Initialise the hints display
+    hintsUsed = 0;
+    updateHintsDisplay();
 
     // Initialise the mistakes display
     mistakes = 0;
@@ -635,6 +657,7 @@ function saveGameState() {
     puzzleName: selectedPuzzle.displayName,
     tiles: tiles,
     mistakes: mistakes,
+    hintsUsed: hintsUsed,
     score: score,
     streak: streak,
     gameInProgress: solvedTiles < totalTiles
@@ -663,6 +686,9 @@ function loadGameState() {
 
   mistakes = savedState.mistakes;
   updateMistakesDisplay();
+
+  hintsUsed = savedState.hintsUsed;
+  updateHintsDisplay();
 
   // Restore correct game type
   currentGameType = savedState.gameType;
@@ -725,6 +751,10 @@ function checkPuzzleCompletion() {
             mistakes = 0;
             updateMistakesDisplay();
 
+            // Initialise the hints display
+            hintsUsed = 0;
+            updateHintsDisplay();
+
             // Need to re-save the state because it was saved before the timeout
             saveGameState();
         }, 1000);   // Timeout to match your fade-out duration
@@ -738,8 +768,8 @@ function updateMistakesDisplay() {
   const mistakesDisplay = document.getElementById("mistakesDisplay");
   mistakesDisplay.innerHTML = '';  // Clear the previous content
 
-  // Loop to create 3 X's, and fill them based on the number of mistakes
-  for (let i = 0; i < 3; i++) {
+  // Loop to create X's, and fill them based on the number of mistakes
+  for (let i = 0; i < MAX_MISTAKES; i++) {
     const xElement = document.createElement("span");
     xElement.classList.add("mistake-x");
     if (i < mistakes) {
@@ -770,6 +800,23 @@ function updateScoreDisplay(correct) {
     // Update UI
     document.getElementById("scoreValue").textContent = score;
     document.getElementById("streakValue").textContent =streak;
+}
+
+function updateHintsDisplay() {
+  console.log("Updating hint display...");
+
+  const hintsDisplay = document.getElementById("hintsDisplay");
+  hintsDisplay.innerHTML = '';
+
+  for (let i = 0; i < MAX_HINTS; i++) {
+    const bulb = document.createElement("span");
+    bulb.classList.add("hint-bulb");
+    if (i >= hintsUsed) {
+      bulb.classList.add("active");
+    }
+    bulb.textContent = "💡";
+    hintsDisplay.appendChild(bulb);
+  }
 }
 
 function hideTiles() {
@@ -840,7 +887,7 @@ function submitAnswer() {
     // Close the popup
     closePopups();
 
-    if (mistakes >= 3) {
+    if (mistakes >= MAX_MISTAKES) {
       // Delay the alert to let the sound play first
       setTimeout(() => {
         alert("Too many mistakes. Try harder!");
@@ -848,6 +895,10 @@ function submitAnswer() {
         // Reset mistakes for the new puzzle
         mistakes = 0;
         updateMistakesDisplay();
+
+        // Reset hints used for the new puzzle
+        hintsUsed = 0;
+        updateHintsDisplay();
 
         // Hide all tiles
         hideTiles();
