@@ -207,5 +207,47 @@ const geronimoPuzzles = [
     options: ["His nephew Benjamin", "His cousin Trap", "His secretary Mousella"],
     answerIndex: 1,
     difficulty: 1
+  },
+  {
+    image: "sheriff.png",
+    question: "Strong mouse that Geronimo manages to upset multiple times and escape him in Wild Wild West",
+    options: ["Cactus Cody Mouse", "Sheriff Squeaks", "Mick Muscle Mouse"],
+    answerIndex: 2,
+    difficulty: 3
+  },
+  {
+    image: "freezer.png",
+    question: "Trap almost won the Super Chef contest by cooking frozen dishes made by who?",
+    options: ["Aunt Sweetfur", "Saucy le Paws", "Gordon Ratsey"],
+    answerIndex: 0,
+    difficulty: 2
+  },
+  {
+    image: "telescope.png",
+    question: "What was Trap’s favourite subject in school?",
+    options: ["Maths", "Spelling", "Lunch"],
+    answerIndex: 2,
+    difficulty: 1
+  },
+  {
+    image: "pirate.png",
+    question: "Evil mouse who spreads Blue Spots Disease over New Moise City and steals the antidote from Prof. Brainymouse:",
+    options: ["Sally Ratmousen", "Sally’s cousin Shadow", "Sally’s evil cat"],
+    answerIndex: 1,
+    difficulty: 3
+  },
+  {
+    image: "icecream.png",
+    question: "He appears dressed as an ice cream cone, cactus and banana tree and helps Geronimo solve the mystery of the blue spots",
+    options: ["Sherlock Mouse", "Inspector Clawseau", "Hercule Poirat"],
+    answerIndex: 2,
+    difficulty: 2
+  },
+  {
+    image: "banana.png",
+    question: "A fried of Geronimo since preschool who has banana-shaped things, including his car",
+    options: ["Cheddar Cluepaw", "Hercule Poirat", "Mystery Whiskers"],
+    answerIndex: 1,
+    difficulty: 1
   }
 ];

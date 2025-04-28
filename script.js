@@ -189,15 +189,14 @@ document.addEventListener("DOMContentLoaded", function () {
   drawUiElements();
 });
 
-// Event listener for the Escape key to close the popups
+// Key presses events
 document.addEventListener('keydown', (event) => {
+  // Event listener for the Escape key to close the popups
   if (event.key === 'Escape') {
     closePopups();
   }
-});
 
-// Event listener for the Enter key to submit the answer
-document.addEventListener('keydown', (event) => {
+  // Event listener for the Enter key to submit the answer
   if (event.key === 'Enter') {
     const mathPopup = document.getElementById('mathPopup');
     const geronimoPopup = document.getElementById('geronimoPopup');
