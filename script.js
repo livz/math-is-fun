@@ -281,34 +281,43 @@ function generateGeronimoPuzzle() {
   return geronimoPuzzles[randomIndex];
 }
 
+function generateGeronimoPuzzle(puzzleList) {
+  const randomIndex = Math.floor(Math.random() * puzzleList.length);
+  const selectedPuzzle = puzzleList.splice(randomIndex, 1)[0];  // removes and returns
+
+  return selectedPuzzle;
+}
+
 function generateGeronimoGrid() {
   console.log(`Generate a new grid of Geronimo questions`);
 
   // Re-initialise solved puzzles counter
   solvedTiles = 0;
 
-  const background = document.querySelector('.background');
-
   // Clear any previous content
+  const background = document.querySelector('.background');
   background.innerHTML = '';
 
+  const puzzlePool = [...geronimoPuzzles]; // Make a shallow copy to preserve original list
+
+  if (totalTiles > puzzlePool.length) {
+    console.error("Not enough unique puzzles.");
+    return;
+  }
+
   for (let i = 0; i < totalTiles; i++) {
+    // Generate a random Geronimo puzzle (image + question)
+    const questionObj = generateGeronimoPuzzle(puzzlePool);
+
     const square = document.createElement('div');
     square.classList.add('square');
     square.id = `square${i + 1}`;
-
-    // Generate a random Geronimo puzzle (image + question)
-    const questionObj = generateGeronimoPuzzle();
-
     // Render the image in the tile
     square.innerHTML = `<img src="assets/geronimo/${questionObj.image}" class="geronimo-tile-image">`;
 
     // Store question in dataset
     square.dataset.questionObj = JSON.stringify(questionObj);
-
-    const correctIndex = questionObj.answerIndex;
-    square.dataset.answer = questionObj.options[correctIndex];
-
+    square.dataset.answer = questionObj.options[questionObj.answerIndex];
     square.style.backgroundColor = getRandomColor();
 
     // Add click handler to show the quiz question
