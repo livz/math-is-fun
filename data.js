@@ -249,5 +249,89 @@ const geronimoPuzzles = [
     options: ["Cheddar Cluepaw", "Hercule Poirat", "Mystery Whiskers"],
     answerIndex: 1,
     difficulty: 1
+  },
+  {
+    image: "map.png",
+    question: "What does the parchment that Geronimo recovers in Japan contain?",
+    options: ["A secret recipe to world’s best sushi", "An ancient technique used by samurai", "A treasure map"],
+    answerIndex: 1,
+    difficulty: 3
+  },
+  {
+    image: "samurai.png",
+    question: "How is Geronimo called in Japan by the local people, in a polite manner?",
+    options: ["Gernomino-san", "Sir Geronimo", "Sensei Geronimo"],
+    answerIndex: 0,
+    difficulty: 2
+  },
+  {
+    image: "magnifying.png",
+    question: "How does Trap help the researchers find a cure for the blue spot disease?",
+    options: ["He bakes cookies", "He sings songs", "He tells jokes"],
+    answerIndex: 2,
+    difficulty: 1
+  },
+  {
+    image: "storybook.png",
+    question: "What story would Aunt Sweetfur read to Geronimo when he was little?",
+    options: ["Jack and the Cheese Sticks", "The three little rats", "Ratpunzel"],
+    answerIndex: 0,
+    difficulty: 3
+  },
+  {
+    image: "tp.png",
+    question: "One-eyed rat that has built his business around toilet related products?",
+    options: ["Flusher Pottypaws", "Pawsy von Potty", "Flusher McPotty"],
+    answerIndex: 0,
+    difficulty: 2
+  },
+  {
+    image: "coins.png",
+    question: "Scary and dangerous contest that Geronimo participates in, and wins a million pounds?",
+    options: ["The price is right", "Escape room", "Mousetrap"],
+    answerIndex: 2,
+    difficulty: 1
+  },
+  {
+    image: "chocolate.png",
+    question: "Old friend of Geronimo that he helps opening a new business of selling chocolate?",
+    options: ["Martzipaw Nibbleton", "Whisker Fudgetail", "Nutty Chocorat"],
+    answerIndex: 2,
+    difficulty: 3
+  },
+  {
+    image: "camper.png",
+    question: "Very cold place where Geronimo is stranded with his grandfather’s camper van",
+    options: ["Frostpaw Forest", "Ratzikistan", "Mouseberg Tundra"],
+    answerIndex: 1,
+    difficulty: 2
+  },
+  {
+    image: "spoon.png",
+    question: "Grandfather William Shortpaws’ cook, whose favourite tool is an extensive rolling pin",
+    options: ["Fiona Flavourpaw", "Nina Garlicwhiskers", "Tina Spicytail"],
+    answerIndex: 2,
+    difficulty: 1
+  },
+  {
+    image: "factory.png",
+    question: "The mouse behind the ghost at the Grand Hotel wants to scare the guests and turn the hotel into what?",
+    options: ["A toy factory", "A toilet factory", "A cheese factory"],
+    answerIndex: 1,
+    difficulty: 3
+  },
+  {
+    image: "sandwich.png",
+    question: "What “glorious” breakfast does uncle Samuel Stingysnout serve the guests of his son Stevie’s weeding?",
+    options: ["A carrot", "A salami and cheese wrap", "A pea"],
+    answerIndex: 2,
+    difficulty: 2
+  },
+  {
+    image: "ghost.png",
+    question: "Funny costume that Geronimo wears in order to blend in with the carnivorous ware-pumpkins",
+    options: ["Giant dandelion", "Beanstalk", "Pumpkin"],
+    answerIndex: 2,
+    difficulty: 1
   }
 ];
