@@ -328,10 +328,38 @@ const geronimoPuzzles = [
     difficulty: 2
   },
   {
-    image: "ghost.png",
+    image: "ghost-cat.png",
     question: "Funny costume that Geronimo wears in order to blend in with the carnivorous ware-pumpkins",
     options: ["Giant dandelion", "Beanstalk", "Pumpkin"],
     answerIndex: 2,
     difficulty: 1
+  },
+  {
+    image: "black-cat.png",
+    question: "Master of disguises and experienced thief, her main goal is to get rich",
+    options: ["The Black Cat", "The Shadow", "The Squeaky Panther"],
+    answerIndex: 1,
+    difficulty: 3
+  },
+  {
+    image: "mozart.png",
+    question: "Geronimo’s athletic friend, who trains him to win the Mouse Island Idol singing contest",
+    options: ["Amadeus Mozrat", "Champ Strongpaws", "Rodent Stewart"],
+    answerIndex: 1,
+    difficulty: 2
+  },
+  {
+    image: "ghost.png",
+    question: "Nasty cat who travels around the world in a submarine stealing things and getting away with it",
+    options: ["Curious Cat (C.C.)", "Sneaky Scamper (S.S.)", "Purrfect Pirate (P.P.)"],
+    answerIndex: 2,
+    difficulty: 1
+  },
+  {
+    image: "bookworm.png",
+    question: "Old friend of Thea who shares a passion for motorbikes and books and lives in Milan",
+    options: ["Squeaky Scholar", "Bookmark Bandit", "Scooter Bookworm"],
+    answerIndex: 2,
+    difficulty: 2
   }
 ];
